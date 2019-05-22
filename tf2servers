@@ -1,5 +1,5 @@
 #!/bin/bash
-version="v0.1"
+version="Version 0.1"
 
 
 #lets define some things
@@ -54,6 +54,7 @@ echo -e "\tUpdate    -   update all TF2 servers"
 echo -e "\tRestart   -   restart all TF2 servers"
 echo ""
 echo "$version"
+echo ""
 #echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
 #echo "-----"
 
