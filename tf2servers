@@ -1,5 +1,5 @@
 #!/bin/bash
-#version="v0.1"
+version="v0.1"
 
 
 #lets define some things
