@@ -1,0 +1,68 @@
+#!/bin/bash
+ 
+
+
+#lets define some things
+home="/home/game"
+includes="/includes"
+
+#start servers
+if [ "$1" == "start" ]; then
+    echo "Erecting a server!"
+    parallel -k --jobs 5 < "$home$includes/starttf2.sh"
+    printf "Servers started!"
+
+
+#stop servers
+elif [ "$1" == "stop" ]; then
+    echo "Timberrrrr! Servers going down!"
+    parallel -k < "$home$includes/stoptf2.sh"
+    printf "Servers stopped!"
+
+#test
+
+#update servers
+elif [ "$1" == "update" ]; then
+    echo "Inb4 localisation files"
+    printf "Stopping the servers"       #stop them
+    parallel -k < "$home$includes/stoptf2.sh"
+    printf "Running update script"      #run the update script
+    parallel -k --jobs 4 < "$home$includes/updatetf2.sh"
+
+    printf  "Starting the servers"      #start them again
+    parallel -k --jobs 5 < "$home$includes/starttf2.sh"
+
+
+#reboot servers
+elif [ "$1" == "restart" ]; then
+    echo "Turn it off and on again"
+    printf "Stopping the servers"       #stop them
+    parallel -k < "$home$includes/stoptf2.sh"
+
+    printf  "Starting the servers"      #start them again
+    parallel -k --jobs 5 < "$home$includes/starttf2.sh"
+
+
+#print options
+else
+echo ""
+echo "Available Options:"
+echo ""
+echo "Start     -   start all TF2 servers"
+echo "Stop      -   stop all TF2 servers"
+echo "Update    -   update all TF2 servers"
+echo "Restart   -   restart all TF2 servers"
+#echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
+#echo "-----"
+
+fi
+echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
+echo "-----"
+#printf "test"
+#OTHER THINGS TO BE ADDED
+#start="start"
+#stop="stop"
+#update="update"
+
+#mvmx10="mvmx10_" #auto defines mvmx10 1-8?
+#echo "$mvmx10{1..8}"
