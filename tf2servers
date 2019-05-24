@@ -21,7 +21,7 @@ elif [ "$1" == "stop" ]; then
     parallel -k < "$home$includes/stoptf2.sh"
     printf "Servers stopped!"
 
-#test
+
 
 #update servers
 elif [ "$1" == "update" ]; then
@@ -42,6 +42,7 @@ elif [ "$1" == "restart" ]; then
     printf  "Starting the servers"      #start them again
     parallel -k --jobs 5 < "$home$includes/starttf2.sh"
 
+
 elif [ "$1" == "info" ]; then
     if [ "$2" == "local" ]; then
         echo "Pulling local stats"
@@ -54,6 +55,8 @@ elif [ "$1" == "info" ]; then
         echo ""
         echo "RAM Usage"
         free -h
+
+
     elif [ "$2" == "la" ]; then    
         echo "Pulling LA stats"
         echo ""
@@ -64,7 +67,9 @@ elif [ "$1" == "info" ]; then
         ssh $user@$host 'df -h'
         echo ""
         echo "RAM Usage"
-        ssh $user@$host 'free -h'    
+        ssh $user@$host 'free -h'   
+        
+         
     else
         echo "Available Options:"
         echo ""
