@@ -1,5 +1,5 @@
 #!/bin/bash
-version="Version 0.2"
+version="Version 0.3"
 
 
 #lets define some things
@@ -42,20 +42,53 @@ elif [ "$1" == "restart" ]; then
     printf  "Starting the servers"      #start them again
     parallel -k --jobs 5 < "$home$includes/starttf2.sh"
 
+elif [ "$1" == "info" ]; then
+    if [ "$2" == "local" ]; then
+        echo "Pulling local stats"
+        echo ""
+        echo "Uptime"
+        uptime
+        echo ""
+        echo "File System Usage"
+        df -h
+        echo ""
+        echo "RAM Usage"
+        free -h
+    elif [ "$2" == "la" ]; then    
+        echo "Pulling LA stats"
+        echo ""
+        echo "Uptime"
+        ssh $user@$host 'uptime'
+        echo ""
+        echo "File System Usage"
+        ssh $user@$host 'df -h'
+        echo ""
+        echo "RAM Usage"
+        ssh $user@$host 'free -h'    
+    else
+        echo "Available Options:"
+        echo ""
+        echo -e "\tLocal     -   Local Resource Usages & Uptime"
+        echo -e "\tLA     -   Remote Resource Usages & Uptime"
+    fi
+
+
 #REMOTE SERVER EXECUTE
 #SSH Keys then remote execution?
 elif [ "$1" == "la" ]; then
     #start remote servers
     if [ "$2" == "start" ]; then
         echo "Erecting a remote server!"
-        ssh $user@$host 'uptime'
-        #parallel -k --jobs 5 < "$home$includes/starttf2.sh"
+        ssh $user@$host 'parallel -k < "/home/game/includes/starttf2.sh"'
+        #ssh $user@$host 'bash -s' < script.sh
+        #parallel -k < "$home$includes/starttf2.sh"
         printf "Remote servers started!"
 
 
     #stop remote servers
     elif [ "$2" == "stop" ]; then
         echo "Timberrrrr! Servers going down!"
+        ssh $user@$host 'parallel -k < "/home/game/includes/stoptf2.sh"'
         #parallel -k < "$home$includes/stoptf2.sh"
         printf "Remote servers stopped!"
 
@@ -64,10 +97,13 @@ elif [ "$1" == "la" ]; then
     elif [ "$2" == "update" ]; then
         echo "Inb4 remote localisation files"
         printf "Stopping the remote servers"       #stop them
+        ssh $user@$host 'parallel -k < "/home/game/includes/stoptf2.sh"'
         #parallel -k < "$home$includes/stoptf2.sh"
         printf "Running the remote update script"      #run the update script
+        ssh $user@$host 'parallel -k < "/home/game/includes/updatetf2.sh"'
         #parallel -k --jobs 4 < "$home$includes/updatetf2.sh"
         printf  "Starting the remote servers"      #start them again
+        ssh $user@$host 'parallel -k < "/home/game/includes/starttf2.sh"'
         #parallel -k --jobs 5 < "$home$includes/starttf2.sh"
 
 
@@ -75,9 +111,13 @@ elif [ "$1" == "la" ]; then
     elif [ "$2" == "restart" ]; then
         echo "Turn it off and on again, remotely!"
         printf "Stopping the remote servers"       #stop them
+        ssh $user@$host 'parallel -k < "/home/game/includes/stoptf2.sh"'
         #parallel -k < "$home$includes/stoptf2.sh"
         printf  "Starting the remote servers"      #start them again
+        ssh $user@$host 'parallel -k < "/home/game/includes/starttf2.sh"'
         #parallel -k --jobs 5 < "$home$includes/starttf2.sh"
+      
+
     else
         echo "Available Options:"
         echo ""
@@ -85,6 +125,7 @@ elif [ "$1" == "la" ]; then
         echo -e "\tStop      -   stop all REMOTE TF2 servers"
         echo -e "\tUpdate    -   update all REMOTE TF2 servers"
         echo -e "\tRestart   -   restart all REMOTE TF2 servers"
+
     fi
 #print options
 else
@@ -95,12 +136,11 @@ echo -e "\tStart     -   start all LOCAL TF2 servers"
 echo -e "\tStop      -   stop all LOCAL TF2 servers"
 echo -e "\tUpdate    -   update all LOCAL TF2 servers"
 echo -e "\tRestart   -   restart all LOCAL TF2 servers"
+echo -e "\tInfo      -   Pull Local & Remote Uptime, Disk usage, memory usage & load average"
 echo -e "\tla        -   Push remote commands"
 echo ""
 echo "$version"
 echo ""
-
-
 fi
 echo ""
 echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
