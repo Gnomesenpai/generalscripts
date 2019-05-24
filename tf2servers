@@ -28,7 +28,6 @@ elif [ "$1" == "update" ]; then
     parallel -k < "$home$includes/stoptf2.sh"
     printf "Running update script"      #run the update script
     parallel -k --jobs 4 < "$home$includes/updatetf2.sh"
-
     printf  "Starting the servers"      #start them again
     parallel -k --jobs 5 < "$home$includes/starttf2.sh"
 
@@ -38,13 +37,12 @@ elif [ "$1" == "restart" ]; then
     echo "Turn it off and on again"
     printf "Stopping the servers"       #stop them
     parallel -k < "$home$includes/stoptf2.sh"
-
     printf  "Starting the servers"      #start them again
     parallel -k --jobs 5 < "$home$includes/starttf2.sh"
 
 #REMOTE SERVER EXECUTE
 #SSH Keys then remote execution?
-elif [ "$1" == "la"]; then
+elif [ "$1" == "la" ]; then
     #start remote servers
     if [ "$2" == "start" ]; then
         echo "Erecting a remote server!"
@@ -103,5 +101,6 @@ echo ""
 #echo "-----"
 
 fi
+echo ""
 echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
 echo "-----"
