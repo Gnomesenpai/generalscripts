@@ -5,6 +5,8 @@ version="Version 0.2"
 #lets define some things
 home="/home/game"
 includes="/includes"
+user="game"
+host="la.moevsmachine.tf"
 
 #start servers
 if [ "$1" == "start" ]; then
@@ -46,6 +48,7 @@ elif [ "$1" == "la" ]; then
     #start remote servers
     if [ "$2" == "start" ]; then
         echo "Erecting a remote server!"
+        ssh $user@$host 'uptime'
         #parallel -k --jobs 5 < "$home$includes/starttf2.sh"
         printf "Remote servers started!"
 
@@ -78,27 +81,25 @@ elif [ "$1" == "la" ]; then
     else
         echo "Available Options:"
         echo ""
-        echo -e "\tStart     -   start all TF2 servers"
-        echo -e "\tStop      -   stop all TF2 servers"
-        echo -e "\tUpdate    -   update all TF2 servers"
-        echo -e "\tRestart   -   restart all TF2 servers"
-        echo -e "\tla        -   LA command options, same as above"
+        echo -e "\tStart     -   start all REMOTE TF2 servers"
+        echo -e "\tStop      -   stop all REMOTE TF2 servers"
+        echo -e "\tUpdate    -   update all REMOTE TF2 servers"
+        echo -e "\tRestart   -   restart all REMOTE TF2 servers"
     fi
 #print options
 else
 echo ""
 echo "Available Options:"
 echo ""
-echo -e "\tStart     -   start all TF2 servers"
-echo -e "\tStop      -   stop all TF2 servers"
-echo -e "\tUpdate    -   update all TF2 servers"
-echo -e "\tRestart   -   restart all TF2 servers"
-echo -e "\tla        -   LA command options, same as above"
+echo -e "\tStart     -   start all LOCAL TF2 servers"
+echo -e "\tStop      -   stop all LOCAL TF2 servers"
+echo -e "\tUpdate    -   update all LOCAL TF2 servers"
+echo -e "\tRestart   -   restart all LOCAL TF2 servers"
+echo -e "\tla        -   Push remote commands"
 echo ""
 echo "$version"
 echo ""
-#echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
-#echo "-----"
+
 
 fi
 echo ""
