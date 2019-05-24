@@ -42,6 +42,42 @@ elif [ "$1" == "restart" ]; then
     printf  "Starting the servers"      #start them again
     parallel -k --jobs 5 < "$home$includes/starttf2.sh"
 
+#REMOTE SERVER EXECUTE
+#SSH Keys then remote execution?
+elif [ "$1" == "la"]; then
+    #start servers
+    if [ "$2" == "start" ]; then
+        echo "Erecting a remote server!"
+        #parallel -k --jobs 5 < "$home$includes/starttf2.sh"
+        printf "Remote servers started!"
+
+
+    #stop servers
+    elif [ "$2" == "stop" ]; then
+        echo "Timberrrrr! Servers going down!"
+        #parallel -k < "$home$includes/stoptf2.sh"
+        printf "Remote servers stopped!"
+
+
+    #update servers
+    elif [ "$2" == "update" ]; then
+        echo "Inb4 remote localisation files"
+        printf "Stopping the remote servers"       #stop them
+        #parallel -k < "$home$includes/stoptf2.sh"
+        printf "Running the remote update script"      #run the update script
+        #parallel -k --jobs 4 < "$home$includes/updatetf2.sh"
+        printf  "Starting the remote servers"      #start them again
+        #parallel -k --jobs 5 < "$home$includes/starttf2.sh"
+
+
+    #reboot servers
+    elif [ "$2" == "restart" ]; then
+        echo "Turn it off and on again, remotely!"
+        printf "Stopping the remote servers"       #stop them
+        #parallel -k < "$home$includes/stoptf2.sh"
+        printf  "Starting the remote servers"      #start them again
+        #parallel -k --jobs 5 < "$home$includes/starttf2.sh"
+
 
 #print options
 else
