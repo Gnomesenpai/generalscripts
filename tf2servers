@@ -25,7 +25,7 @@ elif [ "$1" == "stop" ]; then
 
 #update servers
 elif [ "$1" == "update" ]; then
-    echo "Inb4 localisation files"
+    echo "Inb4 localisation files, updating servers!"
     printf "Stopping the servers"       #stop them
     parallel -k < "$home$includes/stoptf2.sh"
     printf "Running update script"      #run the update script
@@ -95,7 +95,7 @@ elif [ "$1" == "la" ]; then
 
     #update remote servers
     elif [ "$2" == "update" ]; then
-        echo "Inb4 remote localisation files"
+        echo "Inb4 remote localisation files, updating servers!"
         printf "Stopping the remote servers"       #stop them
         ssh $user@$host 'parallel -k < "/home/game/includes/stoptf2.sh"'
         #parallel -k < "$home$includes/stoptf2.sh"
@@ -142,6 +142,6 @@ echo ""
 echo "$version"
 echo ""
 fi
-echo ""
-echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
-echo "-----"
+#echo ""
+#echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
+#echo "-----"
