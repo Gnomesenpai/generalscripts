@@ -1,12 +1,17 @@
 #!/bin/bash
-version="Version 0.3"
+version="Version 0.4"
 
 
 #lets define some things
 home="/home/game"
 includes="/includes"
-user="game"
-host="la.moevsmachine.tf"
+#LA details
+user1="game"
+host1="la.moevsmachine.tf"
+#other server details
+user2=""
+host2=""
+
 
 #start servers
 if [ "$1" == "start" ]; then
@@ -61,15 +66,15 @@ elif [ "$1" == "info" ]; then
         echo "Pulling LA stats"
         echo ""
         echo "Uptime"
-        ssh $user@$host 'uptime'
+        ssh $user1@$host1 'uptime'
         echo ""
         echo "File System Usage"
-        ssh $user@$host 'df -h'
+        ssh $user1@$host1 'df -h'
         echo ""
         echo "RAM Usage"
-        ssh $user@$host 'free -h'   
-        
-         
+        ssh $user1@$host1 'free -h'   
+
+
     else
         echo "Available Options:"
         echo ""
@@ -84,8 +89,8 @@ elif [ "$1" == "la" ]; then
     #start remote servers
     if [ "$2" == "start" ]; then
         echo "Erecting a remote server!"
-        ssh $user@$host 'parallel -k < "/home/game/includes/starttf2.sh"'
-        #ssh $user@$host 'bash -s' < script.sh
+        ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
+        #ssh $user1@$host1 'bash -s' < script.sh
         #parallel -k < "$home$includes/starttf2.sh"
         printf "Remote servers started!"
 
@@ -93,7 +98,7 @@ elif [ "$1" == "la" ]; then
     #stop remote servers
     elif [ "$2" == "stop" ]; then
         echo "Timberrrrr! Servers going down!"
-        ssh $user@$host 'parallel -k < "/home/game/includes/stoptf2.sh"'
+        ssh $user1@$host1 'parallel -k < "/home/game/includes/stoptf2.sh"'
         #parallel -k < "$home$includes/stoptf2.sh"
         printf "Remote servers stopped!"
 
@@ -102,13 +107,13 @@ elif [ "$1" == "la" ]; then
     elif [ "$2" == "update" ]; then
         echo "Inb4 remote localisation files, updating servers!"
         printf "Stopping the remote servers"       #stop them
-        ssh $user@$host 'parallel -k < "/home/game/includes/stoptf2.sh"'
+        ssh $user1@$host1 'parallel -k < "/home/game/includes/stoptf2.sh"'
         #parallel -k < "$home$includes/stoptf2.sh"
         printf "Running the remote update script"      #run the update script
-        ssh $user@$host 'parallel -k < "/home/game/includes/updatetf2.sh"'
+        ssh $user1@$host1 'parallel -k < "/home/game/includes/updatetf2.sh"'
         #parallel -k --jobs 4 < "$home$includes/updatetf2.sh"
         printf  "Starting the remote servers"      #start them again
-        ssh $user@$host 'parallel -k < "/home/game/includes/starttf2.sh"'
+        ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
         #parallel -k --jobs 5 < "$home$includes/starttf2.sh"
 
 
@@ -116,10 +121,10 @@ elif [ "$1" == "la" ]; then
     elif [ "$2" == "restart" ]; then
         echo "Turn it off and on again, remotely!"
         printf "Stopping the remote servers"       #stop them
-        ssh $user@$host 'parallel -k < "/home/game/includes/stoptf2.sh"'
+        ssh $user1@$host1 'parallel -k < "/home/game/includes/stoptf2.sh"'
         #parallel -k < "$home$includes/stoptf2.sh"
         printf  "Starting the remote servers"      #start them again
-        ssh $user@$host 'parallel -k < "/home/game/includes/starttf2.sh"'
+        ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
         #parallel -k --jobs 5 < "$home$includes/starttf2.sh"
       
 
