@@ -16,11 +16,20 @@ answer = str(input("Would you like to create or delete an LXC? Enter Create or d
 print('\n')
 if answer in ['create']:
     print("this is the create script")
-    answer = str(input("Pick an ID:\n>"))
+    answer = str(input("Pick an ID: "))
     #need to get the ID entered by the user
-    answer = str(input("Select aount of vcores:\n>"))
+    answer = str(input("Chose an OS (Debian, Ubuntu): "))
+    if answer in ['debian']:
+        print("Debian 9 has been selected!\n")
+        #things here
+    elif answer in ['Ubuntu']:
+        print("Ubuntu has been selected!\n")
+    else:
+        print("Please select an option")
+        #loop here to OS select again 
+    answer = str(input("Select aount of vcores: "))
     #also need to forward number
-    answer = str(input("Select RAM"))
+    answer = str(input("Select RAM: "))
     #same issue
 
 
