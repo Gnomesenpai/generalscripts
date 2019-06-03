@@ -18,8 +18,13 @@ if answer in ['create']:
     print("this is the create script")
     answer = str(input("Pick an ID:\n>"))
     #need to get the ID entered by the user
-    
+    answer = str(input("Select aount of vcores:\n>"))
+    #also need to forward number
+    answer = str(input("Select RAM"))
+    #same issue
 
+
+    #example final string: 
 
 elif answer in ['delete']:
     print("ruh roh, you're getting deleted kiddo")
