@@ -9,8 +9,8 @@ includes="/includes"
 user1="game"
 host1="la.moevsmachine.tf"
 #other server details
-user2=""
-host2=""
+user2="game"
+host2="gnome.moe"
 
 
 #start servers
