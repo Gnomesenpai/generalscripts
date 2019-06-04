@@ -18,6 +18,7 @@ if answer in ['create']:
     print("this is the create script")
     answer = str(input("Pick an ID: "))
     #need to get the ID entered by the user
+    #def osloop():
     answer = str(input("Chose an OS (Debian, Ubuntu): "))
     if answer in ['debian']:
         print("Debian 9 has been selected!\n")
@@ -27,9 +28,10 @@ if answer in ['create']:
     else:
         print("Please select an option")
         #loop here to OS select again 
+        #osloop()
     answer = str(input("Select aount of vcores: "))
     #also need to forward number
-    answer = str(input("Select RAM: "))
+    answer = str(input("Select RAM in GB: "))
     #same issue
 
 
