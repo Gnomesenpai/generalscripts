@@ -16,17 +16,17 @@ answer = str(input("Would you like to create or delete an LXC? Enter Create or d
 print('\n')
 if answer in ['create']:
     print("this is the create script")
-    def inputnumber(message):
+    def vmid(message):
         while True:
             try:
                 answer = int(input("Pick an ID: "))
             except ValueError:
-                print("This is not a number.")
+                print("Please select a valid input.")
                 continue
             else:
                 return answer
                 break
-    id = inputnumber("Select an ID:")
+    id = vmid("Select an ID:")
     #need to get the ID entered by the user
     answer = str(input("Chose an OS (Debian, Ubuntu): "))
     if answer in ['debian']:
@@ -34,26 +34,38 @@ if answer in ['create']:
         #things here
     elif answer in ['Ubuntu']:
         print("Ubuntu has been selected!\n")
+        #things here
     else:
         print("Please select an option")
         #loop here to OS select again 
         #osloop()
-    def inputnumber(message):
+    def vcore(message):
         while True:
             try:
                 answer = int(input("Select vCores: "))
             except ValueError:
-                print("This is not a number.")
+                print("Please select a valid input.")
                 continue
             else:
                 return answer
                 break
-    id = inputnumber("Select vCores: ")
+    id = vcore("Select vCores: ")
 
     #answer = int(input("Select aount of vcores: "))
     #also need to forward number
-    answer = int(input("Select RAM in GB: "))
+    #answer = int(input("Select RAM in GB: "))
     #same issue
+    def ram(message):
+        while True:
+            try:
+                answer = int(input("Select RAM in GB: "))
+            except ValueError:
+                print("Please select a valid input.")
+                continue
+            else:
+                return answer
+                break
+    id = ram("Select RAM in GB: ")
 
 
     #example final string: pct create 999 local:vztmpl/debian-8.0-standard_8.0-1_amd64.tar.gz
