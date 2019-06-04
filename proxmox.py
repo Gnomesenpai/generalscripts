@@ -16,9 +16,18 @@ answer = str(input("Would you like to create or delete an LXC? Enter Create or d
 print('\n')
 if answer in ['create']:
     print("this is the create script")
-    answer = str(input("Pick an ID: "))
+    def inputnumber(message):
+        while True:
+            try:
+                answer = int(input("Pick an ID: "))
+            except ValueError:
+                print("This is not a number.")
+                continue
+            else:
+                return answer
+                break
+    id = inputnumber("Select an ID:")
     #need to get the ID entered by the user
-    #def osloop():
     answer = str(input("Chose an OS (Debian, Ubuntu): "))
     if answer in ['debian']:
         print("Debian 9 has been selected!\n")
@@ -29,13 +38,25 @@ if answer in ['create']:
         print("Please select an option")
         #loop here to OS select again 
         #osloop()
-    answer = str(input("Select aount of vcores: "))
+    def inputnumber(message):
+        while True:
+            try:
+                answer = int(input("Select vCores: "))
+            except ValueError:
+                print("This is not a number.")
+                continue
+            else:
+                return answer
+                break
+    id = inputnumber("Select vCores: ")
+
+    #answer = int(input("Select aount of vcores: "))
     #also need to forward number
-    answer = str(input("Select RAM in GB: "))
+    answer = int(input("Select RAM in GB: "))
     #same issue
 
 
-    #example final string: 
+    #example final string: pct create 999 local:vztmpl/debian-8.0-standard_8.0-1_amd64.tar.gz
 
 elif answer in ['delete']:
     print("ruh roh, you're getting deleted kiddo")
