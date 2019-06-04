@@ -12,42 +12,41 @@ port="<port>"
 user="<username>"
 password="<password>"
 
-answer = str(input("Would you like to create or delete an LXC? Enter Create or delete:\n>"))
+lxcstart = str(input("Would you like to create or delete an LXC? Enter Create or delete:\n>"))
 print('\n')
-if answer in ['create']:
+if lxcstart in ['create']:
     print("this is the create script")
     def vmid(message):
         while True:
             try:
-                answer = int(input("Pick an ID: "))
+                vmid = int(input("Pick an ID: "))
             except ValueError:
                 print("Please select a valid input.")
                 continue
             else:
-                return answer
+                return vmid
                 break
     id = vmid("Select an ID:")
     #need to get the ID entered by the user
-    answer = str(input("Chose an OS (Debian, Ubuntu): "))
-    if answer in ['debian']:
+    operatingsystem = str(input("Chose an OS (Debian, Ubuntu): "))
+    if operatingsystem in ['debian']:
         print("Debian 9 has been selected!\n")
         #things here
-    elif answer in ['Ubuntu']:
+    elif operatingsystem in ['ubuntu']:
         print("Ubuntu has been selected!\n")
         #things here
     else:
         print("Please select an option")
         #loop here to OS select again 
-        #osloop()
     def vcore(message):
         while True:
             try:
-                answer = int(input("Select vCores: "))
+                vcore = int(input("Select vCores: "))
             except ValueError:
                 print("Please select a valid input.")
                 continue
             else:
-                return answer
+                return vcore
                 break
     id = vcore("Select vCores: ")
 
@@ -58,26 +57,26 @@ if answer in ['create']:
     def ram(message):
         while True:
             try:
-                answer = int(input("Select RAM in GB: "))
+                ram = int(input("Select RAM in GB: "))
             except ValueError:
                 print("Please select a valid input.")
                 continue
             else:
-                return answer
+                return ram
                 break
     id = ram("Select RAM in GB: ")
 
-
+    print=('vmid')
     #example final string: pct create 999 local:vztmpl/debian-8.0-standard_8.0-1_amd64.tar.gz
 
-elif answer in ['delete']:
+elif lxcstart in ['delete']:
     print("ruh roh, you're getting deleted kiddo")
 
-elif answer in ['info']:
+elif lxcstart in ['info']:
     print("Lets get some information!\n")
     print('CPU Usage:', psutil.cpu_percent()),     
     #print(psutil.virtual_memory())  # physical memory usage
     print('memory used in %:', psutil.virtual_memory()[2])
 
 else:
-    print("No option selected!")
+    print("No option selected! Exiting!")
