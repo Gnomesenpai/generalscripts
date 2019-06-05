@@ -68,6 +68,7 @@ if lxcstart in ['create']:
 
     print=('vmid')
     #example final string: pct create 999 local:vztmpl/debian-8.0-standard_8.0-1_amd64.tar.gz
+    #example network string 2:pct set 999 -net0 name=eth0,bridge=vmbr0,ip=<ip address>/cidr,gw=<gateway>
 
 elif lxcstart in ['delete']:
     print("ruh roh, you're getting deleted kiddo")
