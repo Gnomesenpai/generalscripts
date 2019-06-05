@@ -1,0 +1,61 @@
+"rules"
+{
+    "Url" "https://moevsmachine.tf/index.php?p=/discussion/5/rules"
+    "Title" "Rules and Regulations"
+    "Hook" "!rules"
+    "Hook" "/rules"
+    "Big"        "Sure"
+}
+
+"commands"
+{
+    "Url" "https://moevsmachine.tf/index.php?p=/discussion/8/commands-list"
+    "Title" "Server Commands"
+    "Hook" "!commands"
+    "Hook" "/commands"
+    "Hook" "!cmds"
+    "Hook" "/cmds"
+    "Big"        "Sure"
+}
+
+"steam group"
+{
+    "Url" "http://steamcommunity.com/groups/dotmoe"
+    "Title" "Steam Group"
+    "Hook" "!group"
+    "Hook" "/group"
+    "Big"        "Sure"
+}
+
+"discord"
+{
+    "Url" "https://discord.gg/YnEuyty"
+    "Title" "discord"
+    "Hook" "!discord"
+    "Hook" "/discord"
+    "Hook" "!calladmin"
+	"Hook" "/calladmin"
+    "Big"        "Sure"
+}
+
+"forums"
+{
+    "Url" "https://moevsmachine.tf"
+    "Title" "forums"
+    "Hook" "!forums"
+    "Hook" "/forums"
+    "Hook" "!forum"
+    "Hook" "/forum"
+    "Big"        "Sure"
+}
+
+"vip"
+{
+    "Url" "https://moevsmachine.tf/index.php?p=/discussion/9/ranks"
+    "Title" "vip"
+    "Hook" "!vip"
+    "Hook" "/vip"
+    "Hook" "!donator"
+    "Hook" "/donator"
+    "Big"        "Sure"
+}
