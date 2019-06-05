@@ -49,11 +49,8 @@ if lxcstart in ['create']:
                 return vcore
                 break
     id = vcore("Select vCores: ")
+    print(type(vcore))
 
-    #answer = int(input("Select aount of vcores: "))
-    #also need to forward number
-    #answer = int(input("Select RAM in GB: "))
-    #same issue
     def ram(message):
         while True:
             try:
@@ -65,8 +62,8 @@ if lxcstart in ['create']:
                 return ram
                 break
     id = ram("Select RAM in GB: ")
-
-    print=('vmid')
+    print(ram)
+    print=(vmid)
     #example final string: pct create 999 local:vztmpl/debian-8.0-standard_8.0-1_amd64.tar.gz
     #example network string 2:pct set 999 -net0 name=eth0,bridge=vmbr0,ip=<ip address>/cidr,gw=<gateway>
 
