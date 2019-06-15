@@ -1,6 +1,5 @@
 #!/bin/bash
-version="Version 0.4"
-
+version="Version 1.0"
 
 #lets define some things
 home="/home/game"
@@ -12,18 +11,23 @@ host1="la.moevsmachine.tf"
 user2="game"
 host2="uk.moevsmachine.tf"
 
-
 #start servers
 if [ "$1" == "start" ]; then
     if [ "$2" == "uk" ]; then
         echo "Starting UK servers."
         ssh $user2@$host2 'parallel -k < "/home/game/includes/starttf2.sh"'
         printf "Servers started!"
+        echo ""
+        echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
+        echo "-----"
 
     elif [ "$2" == "la" ]; then
         echo "Starting LA servers."
         ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
         printf "Servers started!"
+        echo ""
+        echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
+        echo "-----"
 
     else
         echo "Available Options:"
@@ -38,11 +42,17 @@ elif [ "$1" == "stop" ]; then
         echo "Stopping UK servers."
         ssh $user2@$host2 'parallel -k < "/home/game/includes/stoptf2.sh"'
         printf "Servers stopped!"
+        echo ""
+        echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
+        echo "-----"
 
     elif [ "$2" == "la" ]; then
         echo "Stopping LA servers."
         ssh $user1@$host1 'parallel -k < "/home/game/includes/stoptf2.sh"'
         printf "Servers stopped!"
+        echo ""
+        echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
+        echo "-----"
 
     else
         echo "Available Options:"
@@ -61,6 +71,9 @@ elif [ "$1" == "update" ]; then
         ssh $user2@$host2 'parallel -k < "/home/game/includes/updatetf2.sh"'
         printf  "Starting the servers"      #start them again
         ssh $user2@$host2 'parallel -k < "/home/game/includes/starttf2.sh"'
+        echo ""
+        echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
+        echo "-----"
 
     elif [ "$2" == "la" ]; then
         echo "Inb4 localisation files, updating servers!"
@@ -70,6 +83,9 @@ elif [ "$1" == "update" ]; then
         ssh $user1@$host1 'parallel -k < "/home/game/includes/updatetf2.sh"'
         printf  "Starting the servers"      #start them again
         ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
+        echo ""
+        echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
+        echo "-----"
     else
         echo "Available Options:"
         echo ""
@@ -85,6 +101,9 @@ elif [ "$1" == "restart" ]; then
         ssh $user2@$host2 'parallel -k < "/home/game/includes/stoptf2.sh"'
         printf  "Starting the servers"      #start them again
         ssh $user2@$host2 'parallel -k < "/home/game/includes/starttf2.sh"'
+        echo ""
+        echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
+        echo "-----"
 
     elif [ "$2" == "la" ]; then
         echo "Inb4 localisation files, updating servers!"
@@ -92,12 +111,16 @@ elif [ "$1" == "restart" ]; then
         ssh $user1@$host1 'parallel -k < "/home/game/includes/stoptf2.sh"'
         printf  "Starting the servers"      #start them again
         ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
+        echo ""
+        echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
+        echo "-----"
     else
         echo "Available Options:"
         echo ""
         echo -e "\tUK   -   Restart UK Servers"
         echo -e "\tLA   -   Restart LA Servers"
     fi
+
 #pull system information
 elif [ "$1" == "info" ]; then
     if [ "$2" == "uk" ]; then
@@ -112,7 +135,6 @@ elif [ "$1" == "info" ]; then
         echo "RAM Usage"
         ssh $user2@$host2 'free -h'  
 
-
     elif [ "$2" == "la" ]; then    
         echo "Pulling LA stats"
         echo ""
@@ -125,13 +147,13 @@ elif [ "$1" == "info" ]; then
         echo "RAM Usage"
         ssh $user1@$host1 'free -h'   
 
-
     else
         echo "Available Options:"
         echo ""
         echo -e "\tUK     -   Local Resource Usages & Uptime"
         echo -e "\tLA     -   Remote Resource Usages & Uptime"
     fi
+
 #print options
 else
 echo ""
