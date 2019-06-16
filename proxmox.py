@@ -4,10 +4,10 @@
 import os
 
 #lets define some things
-port= <port>
+port= 8222
 user= "<user>"
 host = "<host>"
-
+nodeid = "<node>"
 
 
 #below here shouldn't need modifying by end users?
@@ -37,11 +37,13 @@ if lxcstart in ['create']:
             else:
                 return vmid
                 break
-    id = vmid("Select an ID:")
+    (vmid2) = vmid("Select an ID:")
+    print(vmid2)
     #need to get the ID entered by the user
     operatingsystem = str(input("Chose an OS (Debian, Ubuntu): "))
     if operatingsystem in ['debian']:
         print("Debian 9 has been selected!\n")
+        
         #things here
     elif operatingsystem in ['ubuntu']:
         print("Ubuntu has been selected!\n")
@@ -59,7 +61,7 @@ if lxcstart in ['create']:
             else:
                 return vcore
                 break
-    id = vcore("Select vCores: ")
+    vcoreid = vcore("Select vCores: ")
     #print(type(vcore))
 
     def ram(message):
@@ -72,13 +74,27 @@ if lxcstart in ['create']:
             else:
                 return ram
                 break
-    id = ram("Select RAM in GB: ")
+    ramid = ram("Select RAM in GB: ")
+
+    def vmhostname(message):
+        while True:
+            try:
+                vmhostname = str(input("Enter a FQDN: "))
+            except ValueError:
+                print("Please select a valid input.")
+                continue
+            else:
+                return vmhostname
+                break
+    vmhostnameid = vmhostname("Enter a FQDN: ")
     #print(ram)
     #ram2 = "%d" % (ram)
     #print(ram2)
     #example final string: pct create 999 local:vztmpl/debian-8.0-standard_8.0-1_amd64.tar.gz
     #example network string 2:pct set 999 -net0 name=eth0,bridge=vmbr0,ip=<ip address>/cidr,gw=<gateway>
-
+    finalstring = 'pvesh create /nodes/%s/lxc -vmid %d -hostname %s -storage sas10k -cores %d -memory %d -swap 0' % (nodeid, vmid2, vmhostnameid, vcoreid, ramid)
+    # -ostemplate templates:debian-9.*.tar.gz
+    print(finalstring)
 elif lxcstart in ['delete']:
     print("ruh roh, you're getting deleted kiddo")
 
