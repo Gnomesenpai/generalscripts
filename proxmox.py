@@ -93,7 +93,7 @@ if lxcstart in ['create']:
     #example final string: pct create 999 local:vztmpl/debian-8.0-standard_8.0-1_amd64.tar.gz
     #example network string 2:pct set 999 -net0 name=eth0,bridge=vmbr0,ip=<ip address>/cidr,gw=<gateway>
     finalstring = 'pvesh create /nodes/%s/lxc -vmid %d -hostname %s -storage sas10k -cores %d -memory %d -swap 0' % (nodeid, vmid2, vmhostnameid, vcoreid, ramid)
-    # -ostemplate templates:debian-9.*.tar.gz
+    # -ostemplate templates:debian-9.0-standard_9.*.tar.gz
     print(finalstring)
 elif lxcstart in ['delete']:
     print("ruh roh, you're getting deleted kiddo")
