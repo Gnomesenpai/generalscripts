@@ -79,6 +79,7 @@ elif lxcstart in ['delete']:
     print("ruh roh, you're getting deleted kiddo")
 
 elif lxcstart in ['info']:
+    print("Polling system information, please wait!")
     #get pve version
     proxversion = "'pvesh get /version'"
     proxversion2 = 'ssh -p %d %s@%s %s' % (port, user, host, proxversion)
