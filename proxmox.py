@@ -128,11 +128,3 @@ elif lxcstart in ['info']:
 
 else:
     print("No option selected, exiting!")
-    #print(port)
-    #print(user)
-    #print(host)
-
-    #datainput = "'ls -la'"
-    #mycmd = 'ssh -p 8222 root@nagisa.gnome.moe "ls -la"'
-    #mycmd = 'ssh -p %d %s@%s %s' % (port, user, host, datainput)
-    #os.system(mycmd)
