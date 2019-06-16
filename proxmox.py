@@ -1,19 +1,12 @@
 #!/usr/bin/python3
 #!/usr/bin/env python3
-#testing information using psutil
-#install psutil with "pip3 install psutil"
-#import psutil
+
 import os
 
 #lets define some things
 port= <port>
 user= "<user>"
 host = "<host>"
-
-
-#maybe use SSH keys instead? for testing purposes user&pass will do
-#user = "<user>"
-#password="<password>"
 
 #def lxcstart(message):
 #    while True:
