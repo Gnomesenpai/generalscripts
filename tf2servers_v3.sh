@@ -145,13 +145,36 @@ elif [ "$1" == "info" ]; then
         ssh $user1@$host1 'df -h'
         echo ""
         echo "RAM Usage"
-        ssh $user1@$host1 'free -h'   
+        ssh $user1@$host1 'free -h'
+
+    elif [ "$2" == "all" ]; then    
+        echo "Pulling UK stats"
+        echo ""
+        echo "Uptime"
+        ssh $user2@$host2 'uptime'
+        echo ""
+        echo "File System Usage"
+        ssh $user2@$host2 'df -h'
+        echo ""
+        echo "RAM Usage"
+        ssh $user2@$host2 'free -h' 
+        echo "Pulling LA stats"
+        echo ""
+        echo "Uptime"
+        ssh $user1@$host1 'uptime'
+        echo ""
+        echo "File System Usage"
+        ssh $user1@$host1 'df -h'
+        echo ""
+        echo "RAM Usage"
+        ssh $user1@$host1 'free -h'  
 
     else
         echo "Available Options:"
         echo ""
-        echo -e "\tUK     -   Local Resource Usages & Uptime"
-        echo -e "\tLA     -   Remote Resource Usages & Uptime"
+        echo -e "\tUK     -   UK Resource Usages & Uptime"
+        echo -e "\tLA     -   LA Resource Usages & Uptime"
+        echo -e "\tall    -   All Resource Usages & Uptime"
     fi
 
 #print options

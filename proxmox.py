@@ -8,6 +8,10 @@ port= <port>
 user= "<user>"
 host = "<host>"
 
+
+
+#below here shouldn't need modifying by end users?
+
 #def lxcstart(message):
 #    while True:
 #        try:
