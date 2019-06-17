@@ -2,14 +2,15 @@
 #!/usr/bin/env python3
 
 import os
-
+import time
 #lets define some things
-port= 8222
+port= 22
 user= "<user>"
 host = "<host>"
 nodeid = "<node>"
-
-
+templatestorage = "<dir>"
+templatelocation = "vztmpl"
+vmstoragelocation = "<storage>"
 #below here shouldn't need modifying by end users?
 
 #def lxcstart(message):
@@ -23,9 +24,15 @@ nodeid = "<node>"
 #            return lxcstart
 #            break
 #id = lxcstart("Would you like to create or delete an LXC? Enter Create or delete:\n>")
-lxcstart = str(input("Would you like to create or delete an LXC? Enter Create or delete or type info for information:\n>"))
+print("Updating LXC download cache")
+#lxcupdate = 'ls /mechmirror/templates/template/cache > /mechmirror/backend/lxcdownloaded.txt' # done manually for now
+#lxcupdate2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcupdate)                             # 
+#os.system(lxcupdate2)
+
+
+creation = str(input("Would you like to create or delete an LXC? Enter Create or delete or type info for information:\n>"))
 print('\n')
-if lxcstart in ['create']:
+if creation in ['create']:
     print("this is the create script")
     def vmid(message):
         while True:
@@ -38,19 +45,20 @@ if lxcstart in ['create']:
                 return vmid
                 break
     (vmid2) = vmid("Select an ID:")
-    print(vmid2)
-    #need to get the ID entered by the user
-    operatingsystem = str(input("Chose an OS (Debian, Ubuntu): "))
-    if operatingsystem in ['debian']:
-        print("Debian 9 has been selected!\n")
-        
-        #things here
-    elif operatingsystem in ['ubuntu']:
-        print("Ubuntu has been selected!\n")
-        #things here
-    else:
-        print("Please select an option")
-        #loop here to OS select again 
+    lxcdownloaded = 'pvesm list local -content %s' % (templatelocation)
+    lxcdownloaded2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcdownloaded)
+    os.system(lxcdownloaded2)
+    def osid(message):
+        while True:
+            try:
+                osid = str(input("Select an operating system from the above list: "))
+            except ValueError:
+                print("Please select a valid input.")
+                continue
+            else:
+                return osid
+                break
+    ostemplateid = osid("Select an operating system from the above list: ")
     def vcore(message):
         while True:
             try:
@@ -62,19 +70,29 @@ if lxcstart in ['create']:
                 return vcore
                 break
     vcoreid = vcore("Select vCores: ")
-    #print(type(vcore))
-
     def ram(message):
         while True:
             try:
-                ram = int(input("Select RAM in GB: "))
+                ram = int(input("Select RAM in MB: "))
             except ValueError:
                 print("Please select a valid input.")
                 continue
             else:
                 return ram
                 break
-    ramid = ram("Select RAM in GB: ")
+    ramid = ram("Select RAM in MB: ")
+
+    def hdd(message):
+        while True:
+            try:
+                hdd = int(input("Chose HD size in GB: "))
+            except ValueError:
+                print("Please select a valid input.")
+                continue
+            else:
+                return hdd
+                break
+    hddsize = hdd("Chose HD size in GB: ")
 
     def vmhostname(message):
         while True:
@@ -87,18 +105,60 @@ if lxcstart in ['create']:
                 return vmhostname
                 break
     vmhostnameid = vmhostname("Enter a FQDN: ")
-    #print(ram)
-    #ram2 = "%d" % (ram)
-    #print(ram2)
-    #example final string: pct create 999 local:vztmpl/debian-8.0-standard_8.0-1_amd64.tar.gz
-    #example network string 2:pct set 999 -net0 name=eth0,bridge=vmbr0,ip=<ip address>/cidr,gw=<gateway>
-    finalstring = 'pvesh create /nodes/%s/lxc -vmid %d -hostname %s -storage sas10k -cores %d -memory %d -swap 0' % (nodeid, vmid2, vmhostnameid, vcoreid, ramid)
-    # -ostemplate templates:debian-9.0-standard_9.*.tar.gz
-    print(finalstring)
-elif lxcstart in ['delete']:
+    #ip addressing:
+    def networkingipaddr(message):
+        while True:
+            try:
+                networkingipaddr = str(input("Enter an IP address and CIDR eg 192.168.2.10/24 or dhcp: "))
+            except ValueError:
+                print("Please select a valid input.")
+                continue
+            else:
+                return networkingipaddr
+                break
+    networkingipaddr2 = networkingipaddr("Enter an IP address and CIDR eg 192.168.2.10/24 or dhcp: ")   
+    #gateway:
+    def networkinggw(message):
+        while True:
+            try:
+                networkinggw = str(input("Enter the gateway: "))
+            except ValueError:
+                print("Please select a valid input.")
+                continue
+            else:
+                return networkinggw
+                break
+    networkinggw2 = networkinggw("Enter the gateway: ")  
+    #print('Creating LXC Container ID %d with Operating system %s') % (vmid2, ostemplateid)
+    finalstring = 'pvesh create /nodes/%s/lxc -vmid %d -hostname %s -storage %s -cores %d -memory %d -swap 0 -ostemplate local:%s/%s -rootfs %d -unprivileged -pass' % (nodeid, vmid2, vmhostnameid, vmstoragelocation, vcoreid, ramid, templatelocation, ostemplateid, hddsize) #s-size %d
+    finalstring2 = 'ssh -p %d %s@%s %s' % (port, user, host, finalstring)
+    os.system(finalstring2)
+    lxccreation = 'LXC %d has been created' % (vmid2)
+    print(lxccreation)
+    time.sleep(5)
+    #lets do some networking
+    networstring = 'pvesh set /nodes/%s/lxc/%d/config -net0 bridge=vmbr0,ip=%s,name=eth0,type=veth' % (nodeid, vmid2, networkingipaddr2)
+    networstring2 = 'ssh -p %d %s@%s %s' % (port, user, host, networstring)
+    os.system(networstring2)
+    #print completion
+    lxcnetworkcreation = 'LXC %d network has been configured' % (vmid2)
+    print(lxcnetworkcreation)    
+    time.sleep(5)
+    #starting LXC
+    print('Starting LXC, wait 10 seconds:')
+    #pulling LXC status
+    lxcstart = 'pvesh create /nodes/%s/lxc/%d/status/start' % (nodeid, vmid2)
+    lxcstart2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcstart)
+    os.system(lxcstart2)
+    time.sleep(10)
+    lxcstatus = 'pvesh get /nodes/%s/lxc/%d/status/current' % (nodeid, vmid2)
+    lxcstatus2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcstatus)
+    os.system(lxcstatus2)
+    #print('LXC %d created!') % (vmid2)
+elif creation in ['delete']:
     print("ruh roh, you're getting deleted kiddo")
 
-elif lxcstart in ['info']:
+elif creation in ['info']:
     print("Polling system information, please wait!")
     #get pve version
     proxversion = "'pvesh get /version'"
@@ -128,3 +188,9 @@ elif lxcstart in ['info']:
 
 else:
     print("No option selected, exiting!")
+
+
+
+    #to do:
+    #   Add hard disk size option
+    #
