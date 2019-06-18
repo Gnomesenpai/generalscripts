@@ -5,12 +5,13 @@ import os
 import time
 #lets define some things
 port= 22
-user= "<user>"
+user= "<user>" #dont use root for fucks sake
 host = "<host>"
 nodeid = "<node>"
-templatestorage = "<dir>"
-templatelocation = "vztmpl"
-vmstoragelocation = "<storage>"
+templatestorage = "<dir>" #location of ISO/cache folder (local on new install)
+templatelocation = "vztmpl" #generally never needs to change
+vmstoragelocation = "<storage>" #default local-zfs or local-lvm on fresh install
+
 #below here shouldn't need modifying by end users?
 
 #def lxcstart(message):
@@ -28,7 +29,11 @@ print("Updating LXC download cache")
 #lxcupdate = 'ls /mechmirror/templates/template/cache > /mechmirror/backend/lxcdownloaded.txt' # done manually for now
 #lxcupdate2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcupdate)                             # 
 #os.system(lxcupdate2)
-
+#
+#
+#
+#
+# Could potentionally use : pvesm list templates -content vztmpl - with templates being defined by the 'templatestorage'
 
 creation = str(input("Would you like to create or delete an LXC? Enter Create or delete or type info for information:\n>"))
 print('\n')
@@ -45,7 +50,7 @@ if creation in ['create']:
                 return vmid
                 break
     (vmid2) = vmid("Select an ID:")
-    lxcdownloaded = 'pvesm list local -content %s' % (templatelocation)
+    lxcdownloaded = 'pvesm list %s -content %s' % (templatestorage, templatelocation)
     lxcdownloaded2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcdownloaded)
     os.system(lxcdownloaded2)
     def osid(message):
@@ -146,11 +151,11 @@ if creation in ['create']:
     time.sleep(5)
     #starting LXC
     print('Starting LXC, wait 10 seconds:')
-    #pulling LXC status
     lxcstart = 'pvesh create /nodes/%s/lxc/%d/status/start' % (nodeid, vmid2)
     lxcstart2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcstart)
     os.system(lxcstart2)
     time.sleep(10)
+    #pulling LXC status
     lxcstatus = 'pvesh get /nodes/%s/lxc/%d/status/current' % (nodeid, vmid2)
     lxcstatus2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcstatus)
     os.system(lxcstatus2)
@@ -192,5 +197,5 @@ else:
 
 
     #to do:
-    #   Add hard disk size option
+    #   Add password field, as it stands you have to pct connect <vmid> manually to change the password which isn't ideal.
     #
