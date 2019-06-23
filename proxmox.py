@@ -3,6 +3,7 @@
 
 import os
 import time
+import getpass
 #lets define some things
 port= 22
 user= "<user>" #dont use root for fucks sake
@@ -98,6 +99,37 @@ if creation in ['create']:
                 return hdd
                 break
     hddsize = hdd("Chose HD size in GB: ")
+
+    pass1 = getpass.getpass('Enter the Root password: ')
+    pass2 = getpass.getpass('Enter the Root password AGAIN: ')    
+    if pass2==pass1:
+        print("password created")
+    else:
+        print("Password does not match. Please try again")
+        
+
+
+
+
+
+
+    #try: 
+	 #   passwrd = getpass.getpass() 
+    #except Exception as error: 
+	#    print('ERROR', error) 
+    #else:
+        #return passwrd
+     #   break 
+	    #print('Password entered:', password) 
+   # def passwd(message):
+   #     while True:
+   #         try:
+   #             passwd = getpass.getpass()
+   #         except Exception as error:
+   #             print('ERROR', error)
+   #         else:
+   #             print("Please type a password")
+   #password = passwd 
 
     def vmhostname(message):
         while True:
@@ -196,6 +228,7 @@ else:
 
 
 
-    #to do:
-    #   Add password field, as it stands you have to pct connect <vmid> manually to change the password which isn't ideal.
-    #
+#to do:
+#   Add password field, as it stands you have to pct connect <vmid> manually to change the password which isn't ideal.
+#   some way to better impliment OS selection, current works but not ideal.
+  
