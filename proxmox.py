@@ -9,9 +9,9 @@ port= 22
 user= "<user>" #dont use root for fucks sake
 host = "<host>"
 nodeid = "<node>"
-templatestorage = "<dir>" #location of ISO/cache folder (local on new install)
+templatestorage = "<template storage)" #location of ISO/cache folder (local on new install) 
 templatelocation = "vztmpl" #generally never needs to change
-vmstoragelocation = "<storage>" #default local-zfs or local-lvm on fresh install
+vmstoragelocation = "<vm storage>" #default local-zfs or local-lvm on fresh install
 
 #below here shouldn't need modifying by end users?
 
@@ -36,6 +36,10 @@ print("Updating LXC download cache")
 #
 # Could potentionally use : pvesm list templates -content vztmpl - with templates being defined by the 'templatestorage'
 
+
+#
+#VMID needs to ideall be automated, possibly done with listing the current configs on the server?
+#
 creation = str(input("Would you like to create or delete an LXC? Enter Create or delete or type info for information:\n>"))
 print('\n')
 if creation in ['create']:
@@ -86,7 +90,7 @@ if creation in ['create']:
             else:
                 return ram
                 break
-    ramid = ram("Select RAM in MB: ")
+    ramid = ram("Select RAM in MB (min 512): ")
 
     def hdd(message):
         while True:
@@ -107,30 +111,6 @@ if creation in ['create']:
     else:
         print("Password does not match. Please try again")
         
-
-
-
-
-
-
-    #try: 
-	 #   passwrd = getpass.getpass() 
-    #except Exception as error: 
-	#    print('ERROR', error) 
-    #else:
-        #return passwrd
-     #   break 
-	    #print('Password entered:', password) 
-   # def passwd(message):
-   #     while True:
-   #         try:
-   #             passwd = getpass.getpass()
-   #         except Exception as error:
-   #             print('ERROR', error)
-   #         else:
-   #             print("Please type a password")
-   #password = passwd 
-
     def vmhostname(message):
         while True:
             try:
@@ -143,6 +123,8 @@ if creation in ['create']:
                 break
     vmhostnameid = vmhostname("Enter a FQDN: ")
     #ip addressing:
+    #
+    # TO SORT, IF STATEMENT FOR DHCP OR STATIC ADDRESSING THEN INTO IP/GW CONFIGURATION
     def networkingipaddr(message):
         while True:
             try:
@@ -167,14 +149,14 @@ if creation in ['create']:
                 break
     networkinggw2 = networkinggw("Enter the gateway: ")  
     #print('Creating LXC Container ID %d with Operating system %s') % (vmid2, ostemplateid)
-    finalstring = 'pvesh create /nodes/%s/lxc -vmid %d -hostname %s -storage %s -cores %d -memory %d -swap 0 -ostemplate local:%s/%s -rootfs %d -unprivileged -pass' % (nodeid, vmid2, vmhostnameid, vmstoragelocation, vcoreid, ramid, templatelocation, ostemplateid, hddsize) #s-size %d
+    finalstring = 'pvesh create /nodes/%s/lxc -vmid %d -hostname %s -storage %s -cores %d -memory %d -swap 0 -ostemplate local:%s/%s -rootfs %d -unprivileged -password %s -swap 0' % (nodeid, vmid2, vmhostnameid, vmstoragelocation, vcoreid, ramid, templatelocation, ostemplateid, hddsize, pass1) #s-size %d
     finalstring2 = 'ssh -p %d %s@%s %s' % (port, user, host, finalstring)
     os.system(finalstring2)
     lxccreation = 'LXC %d has been created' % (vmid2)
     print(lxccreation)
     time.sleep(5)
     #lets do some networking
-    networstring = 'pvesh set /nodes/%s/lxc/%d/config -net0 bridge=vmbr0,ip=%s,name=eth0,type=veth' % (nodeid, vmid2, networkingipaddr2)
+    networstring = 'pvesh set /nodes/%s/lxc/%d/config -net0 bridge=vmbr0,ip=%s,gw=%s,name=eth0,type=veth' % (nodeid, vmid2, networkingipaddr2, networkinggw2)
     networstring2 = 'ssh -p %d %s@%s %s' % (port, user, host, networstring)
     os.system(networstring2)
     #print completion
