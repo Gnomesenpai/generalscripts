@@ -7,26 +7,15 @@ import getpass
 #lets define some things
 port= 22
 user= "<user>" #dont use root for fucks sake
-host = "<host>"
-nodeid = "<node>"
-templatestorage = "<template storage)" #location of ISO/cache folder (local on new install) 
+host = "<host>" #hostname or IP of proxmox management
+nodeid = "<node>" #node ID
+templatestorage = "local" #location of ISO/cache folder (local on new install) 
 templatelocation = "vztmpl" #generally never needs to change
-vmstoragelocation = "<vm storage>" #default local-zfs or local-lvm on fresh install
+vmstoragelocation = "local-lvm" #default local-zfs or local-lvm on fresh install
 
 #below here shouldn't need modifying by end users?
 
-#def lxcstart(message):
-#    while True:
-#        try:
-#            lxcstart = int(input("Would you like to create or delete an LXC? Enter Create or delete:\n>"))
-#        except ValueError:
-#            print("Plese select a valid option.")
-#            continue
-#        else:
-#            return lxcstart
-#            break
-#id = lxcstart("Would you like to create or delete an LXC? Enter Create or delete:\n>")
-print("Updating LXC download cache")
+
 #lxcupdate = 'ls /mechmirror/templates/template/cache > /mechmirror/backend/lxcdownloaded.txt' # done manually for now
 #lxcupdate2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcupdate)                             # 
 #os.system(lxcupdate2)
@@ -40,10 +29,21 @@ print("Updating LXC download cache")
 #
 #VMID needs to ideall be automated, possibly done with listing the current configs on the server?
 #
+
+#pull LXC cache
+print("Updating LXC template cache")
+lxccache = 'pveam update'
+lxccache2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxccache)
+os.system(lxccache2)
+print("Done!")
+time.sleep(2)
+
+#start main program
 creation = str(input("Would you like to create or delete an LXC? Enter Create or delete or type info for information:\n>"))
 print('\n')
+#start of LXC creation
 if creation in ['create']:
-    print("this is the create script")
+    #start VMID selection
     def vmid(message):
         while True:
             try:
@@ -55,6 +55,29 @@ if creation in ['create']:
                 return vmid
                 break
     (vmid2) = vmid("Select an ID:")
+    #end VMID selection
+    print("\n")
+    #start template download (optional)
+    lxccurrenttemplate = 'pveam available --section system'# % (templatestorage, templatelocation)
+    lxccurrenttemplate2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxccurrenttemplate)
+    os.system(lxccurrenttemplate2)
+    osdownload = str(input("would you like to download a template? "))
+    if osdownload in ['yes']:
+        print("Lets go!")
+        osdownload2 = str(input("Plese enter the complete template name: "))
+
+        osdownload3 = 'pveam download  %s %s' % (templatestorage, osdownload2)
+
+        osdownload4 = 'ssh -p %d %s@%s %s' % (port, user, host, osdownload3)
+
+        os.system(osdownload4)
+    else:
+        print("Ok, skipping!")
+
+
+    #end template download
+    print("\n")
+    #start OS selection
     lxcdownloaded = 'pvesm list %s -content %s' % (templatestorage, templatelocation)
     lxcdownloaded2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcdownloaded)
     os.system(lxcdownloaded2)
@@ -69,6 +92,9 @@ if creation in ['create']:
                 return osid
                 break
     ostemplateid = osid("Select an operating system from the above list: ")
+    #end OS selection
+    print("\n")
+    #start Vcore selection
     def vcore(message):
         while True:
             try:
@@ -80,10 +106,13 @@ if creation in ['create']:
                 return vcore
                 break
     vcoreid = vcore("Select vCores: ")
+    #end Vcore selection
+    print("\n")
+    #start ram selection
     def ram(message):
         while True:
             try:
-                ram = int(input("Select RAM in MB: "))
+                ram = int(input("Select RAM in MB (min 512): "))
             except ValueError:
                 print("Please select a valid input.")
                 continue
@@ -91,7 +120,9 @@ if creation in ['create']:
                 return ram
                 break
     ramid = ram("Select RAM in MB (min 512): ")
-
+    #end ram selection
+    print("\n")
+    #start HDD selection
     def hdd(message):
         while True:
             try:
@@ -103,14 +134,18 @@ if creation in ['create']:
                 return hdd
                 break
     hddsize = hdd("Chose HD size in GB: ")
-
+    #end HDD selection
+    print("\n")
+    #start password creation
     pass1 = getpass.getpass('Enter the Root password: ')
     pass2 = getpass.getpass('Enter the Root password AGAIN: ')    
     if pass2==pass1:
         print("password created")
     else:
         print("Password does not match. Please try again")
-        
+    #end password creation
+    print("\n")
+    #VM host/FQDN    
     def vmhostname(message):
         while True:
             try:
@@ -122,41 +157,55 @@ if creation in ['create']:
                 return vmhostname
                 break
     vmhostnameid = vmhostname("Enter a FQDN: ")
-    #ip addressing:
-    #
-    # TO SORT, IF STATEMENT FOR DHCP OR STATIC ADDRESSING THEN INTO IP/GW CONFIGURATION
-    def networkingipaddr(message):
-        while True:
-            try:
-                networkingipaddr = str(input("Enter an IP address and CIDR eg 192.168.2.10/24 or dhcp: "))
-            except ValueError:
-                print("Please select a valid input.")
-                continue
-            else:
-                return networkingipaddr
-                break
-    networkingipaddr2 = networkingipaddr("Enter an IP address and CIDR eg 192.168.2.10/24 or dhcp: ")   
-    #gateway:
-    def networkinggw(message):
-        while True:
-            try:
-                networkinggw = str(input("Enter the gateway: "))
-            except ValueError:
-                print("Please select a valid input.")
-                continue
-            else:
-                return networkinggw
-                break
-    networkinggw2 = networkinggw("Enter the gateway: ")  
+    #networking IF statement
+    initialnetwork = str(input("Please select a networking configuration, static/dhcp or blank for none:\n"))
+    if initialnetwork in ['static']:
+        print('static Selected')
+        #Inputting IP/CIDR
+        def networkingipaddr(message):
+            while True:
+                try:
+                    networkingipaddr = str(input("Enter an IP address and CIDR eg 192.168.2.10/24: "))
+                except ValueError:
+                    print("Please select a valid input.")
+                    continue
+                else:
+                    return networkingipaddr
+                    break
+        networkingipaddr2 = networkingipaddr("Enter an IP address and CIDR eg 192.168.2.10/24: ")
+        #Inputting gateway
+        def networkinggw(message):
+            while True:
+                try:
+                    networkinggw = str(input("Enter the gateway: "))
+                except ValueError:
+                    print("Please select a valid input.")
+                    continue
+                else:
+                    return networkinggw
+                    break
+        networkinggw2 = networkinggw("Enter the gateway: ")  
+        #end of Static configuration
+    #start dhcp elif
+    elif initialnetwork in ['dhcp']:
+        print('DHCP Selected')
+        networkingipaddr2 = 'dhcp'
+        networkinggw2 = '0.0.0.0'
+    #end dhcp elif
+    else:
+        print('No network configuration selected, continuing!')
+    initialnetworkvlan = int(input("Please select a VLAN, leave blank for none: "))
+    print("\n")
+
     #print('Creating LXC Container ID %d with Operating system %s') % (vmid2, ostemplateid)
-    finalstring = 'pvesh create /nodes/%s/lxc -vmid %d -hostname %s -storage %s -cores %d -memory %d -swap 0 -ostemplate local:%s/%s -rootfs %d -unprivileged -password %s -swap 0' % (nodeid, vmid2, vmhostnameid, vmstoragelocation, vcoreid, ramid, templatelocation, ostemplateid, hddsize, pass1) #s-size %d
+    finalstring = 'pvesh create /nodes/%s/lxc -vmid %d -hostname %s -storage %s -cores %d -memory %d -swap 0 -ostemplate %s:%s/%s -rootfs %d -unprivileged -password %s -swap 0' % (nodeid, vmid2, vmhostnameid, vmstoragelocation, vcoreid, ramid, templatestorage, templatelocation, ostemplateid, hddsize, pass1) #s-size %d
     finalstring2 = 'ssh -p %d %s@%s %s' % (port, user, host, finalstring)
     os.system(finalstring2)
     lxccreation = 'LXC %d has been created' % (vmid2)
     print(lxccreation)
     time.sleep(5)
     #lets do some networking
-    networstring = 'pvesh set /nodes/%s/lxc/%d/config -net0 bridge=vmbr0,ip=%s,gw=%s,name=eth0,type=veth' % (nodeid, vmid2, networkingipaddr2, networkinggw2)
+    networstring = 'pvesh set /nodes/%s/lxc/%d/config -net0 bridge=vmbr0,ip=%s,gw=%s,name=eth0,type=veth,tag=%d' % (nodeid, vmid2, networkingipaddr2, networkinggw2, initialnetworkvlan)
     networstring2 = 'ssh -p %d %s@%s %s' % (port, user, host, networstring)
     os.system(networstring2)
     #print completion
@@ -197,8 +246,11 @@ elif creation in ['info']:
     print("Disk and mapping usage:\n")
     os.system(proxstorage2)
     print("\n")
+    #get all VM's version
+    #proxvmlist = "'pvesh get /cluster/resources --type vm'"
+    #proxvmlist2 = 'ssh -p %d %s@%s %s' % (port, user, host, proxvmlist)
+    #os.system(proxvmlist2)
 
-    
     #print("Lets get some information!\n")
     #print('CPU Usage:', psutil.cpu_percent()),     
     #print(psutil.virtual_memory())  # physical memory usage
@@ -211,6 +263,16 @@ else:
 
 
 #to do:
-#   Add password field, as it stands you have to pct connect <vmid> manually to change the password which isn't ideal.
-#   some way to better impliment OS selection, current works but not ideal.
+#   General improvements:
+#       some way to better impliment OS selection, current works but not ideal.
+#
+#   User account creation:
+#       create user accounts on proxmox box assign permissions to VMID and correct overall permissions
+#       randomly generate a password for said user account to then print on screen (maybe email?)
+#   
+#   Web frontend:
+#       find out how to actually interlink the two, node.js and wordpress maybe?
+#
+#
+#
   
