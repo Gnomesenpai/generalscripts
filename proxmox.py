@@ -4,15 +4,22 @@
 import os
 import time
 import getpass
+import random
 #lets define some things
-port= 22
-user= "<user>" #dont use root for fucks sake
+#web panel stuff
+webprotocol = "https"
+webpanelport = 8006 # Web access port
 host = "<host>" #hostname or IP of proxmox management
+userrole = "<user role>" #E.g. PVEAdmin
+backupgroup = "<group>" # usergroup for backup drives?
+#backend stuff
+port= 22 # SSH port
+user= "<user>" #dont use root for fucks sake
 nodeid = "<node>" #node ID
 templatestorage = "local" #location of ISO/cache folder (local on new install) 
 templatelocation = "vztmpl" #generally never needs to change
 vmstoragelocation = "local-lvm" #default local-zfs or local-lvm on fresh install
-
+# use SSH keys instead of usename & password
 #below here shouldn't need modifying by end users?
 
 
@@ -40,7 +47,7 @@ time.sleep(2)
 
 #start main program
 creation = str(input("Would you like to create or delete an LXC? Enter Create or delete or type info for information:\n>"))
-print('\n')
+
 #start of LXC creation
 if creation in ['create']:
     #start VMID selection
@@ -56,7 +63,7 @@ if creation in ['create']:
                 break
     (vmid2) = vmid("Select an ID:")
     #end VMID selection
-    print("\n")
+    
     #start template download (optional)
     lxccurrenttemplate = 'pveam available --section system'# % (templatestorage, templatelocation)
     lxccurrenttemplate2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxccurrenttemplate)
@@ -76,7 +83,7 @@ if creation in ['create']:
 
 
     #end template download
-    print("\n")
+    
     #start OS selection
     lxcdownloaded = 'pvesm list %s -content %s' % (templatestorage, templatelocation)
     lxcdownloaded2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcdownloaded)
@@ -93,7 +100,7 @@ if creation in ['create']:
                 break
     ostemplateid = osid("Select an operating system from the above list: ")
     #end OS selection
-    print("\n")
+    
     #start Vcore selection
     def vcore(message):
         while True:
@@ -107,7 +114,7 @@ if creation in ['create']:
                 break
     vcoreid = vcore("Select vCores: ")
     #end Vcore selection
-    print("\n")
+    
     #start ram selection
     def ram(message):
         while True:
@@ -121,7 +128,7 @@ if creation in ['create']:
                 break
     ramid = ram("Select RAM in MB (min 512): ")
     #end ram selection
-    print("\n")
+    
     #start HDD selection
     def hdd(message):
         while True:
@@ -135,16 +142,16 @@ if creation in ['create']:
                 break
     hddsize = hdd("Chose HD size in GB: ")
     #end HDD selection
-    print("\n")
+    
     #start password creation
-    pass1 = getpass.getpass('Enter the Root password: ')
-    pass2 = getpass.getpass('Enter the Root password AGAIN: ')    
-    if pass2==pass1:
-        print("password created")
-    else:
-        print("Password does not match. Please try again")
+    #pass1 = getpass.getpass('Enter the Root password: ')
+    #pass2 = getpass.getpass('Enter the Root password AGAIN: ')    
+    #if pass2==pass1:
+    #    print("password created")
+    #else:
+    #    print("Password does not match. Please try again")
     #end password creation
-    print("\n")
+    
     #VM host/FQDN    
     def vmhostname(message):
         while True:
@@ -195,8 +202,16 @@ if creation in ['create']:
     else:
         print('No network configuration selected, continuing!')
     initialnetworkvlan = int(input("Please select a VLAN, leave blank for none: "))
-    print("\n")
-
+    # start password generator
+    passwordoptions = "abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    passlen = 10
+    pass2 =  "".join(random.sample(passwordoptions ,passlen ))
+    pass1 = pass2
+    #print(pass2)
+    print('Random password generated!')
+    time.sleep(3)
+    #print(pass1)
+    #end password generator
     #print('Creating LXC Container ID %d with Operating system %s') % (vmid2, ostemplateid)
     finalstring = 'pvesh create /nodes/%s/lxc -vmid %d -hostname %s -storage %s -cores %d -memory %d -swap 0 -ostemplate %s:%s/%s -rootfs %d -unprivileged -password %s -swap 0' % (nodeid, vmid2, vmhostnameid, vmstoragelocation, vcoreid, ramid, templatestorage, templatelocation, ostemplateid, hddsize, pass1) #s-size %d
     finalstring2 = 'ssh -p %d %s@%s %s' % (port, user, host, finalstring)
@@ -214,15 +229,49 @@ if creation in ['create']:
     time.sleep(5)
     #starting LXC
     print('Starting LXC, wait 10 seconds:')
-    lxcstart = 'pvesh create /nodes/%s/lxc/%d/status/start' % (nodeid, vmid2)
-    lxcstart2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcstart)
-    os.system(lxcstart2)
+    #lxcstart = 'pvesh create /nodes/%s/lxc/%d/status/start' % (nodeid, vmid2)
+    #lxcstart2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcstart)
+    #os.system(lxcstart2)
     time.sleep(10)
     #pulling LXC status
     lxcstatus = 'pvesh get /nodes/%s/lxc/%d/status/current' % (nodeid, vmid2)
     lxcstatus2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcstatus)
     os.system(lxcstatus2)
-    #print('LXC %d created!') % (vmid2)
+    #print password creation
+    passwordoutput = 'Your Root password is: %s please note it down!' % (pass1)
+    print(passwordoutput)
+    time.sleep(1)
+    #
+    #start of user creation for Proxmox web panel
+    #
+    def username(message):
+        while True:
+            try:
+                username = str(input("Please enter a username for web access:\n>"))
+            except ValueError:
+                print("Please select a valid input.")
+                continue
+            else:
+                return username
+                break
+    username2 = username("Please enter a username for web access:\n>")      
+    usercreation1 = 'pvesh create /access/users --userid %s@pve -password %s -groups %s' % (username2, pass2, backupgroup)
+    usercreation2 = 'ssh -p %d %s@%s %s' % (port, user, host, usercreation1)   
+    os.system(usercreation2)
+    userpassoutput = 'Your Username is: %s \npassword is: %s' % (username2 ,pass1)
+    print(userpassoutput)
+    print("Assigning permissions to LXC")
+    permissions1 = 'pvesh set /access/acl --path /vms/%d --roles %s --users %s@pve' % (vmid2, userrole, username2)
+    permissions2 = 'ssh -p %d %s@%s %s' % (port, user, host, permissions1)   
+    os.system(permissions2)
+    print("Permissions assigned!")
+    weboutput1 = ('Website accessible through %s://%s:%d') % (webprotocol, host, webpanelport)
+    print(weboutput1)
+
+
+
+    #string:        pvesh set /access/acl --path /vms/336 --roles vps --users testuser2@pve
+
 elif creation in ['delete']:
     print("ruh roh, you're getting deleted kiddo")
 
