@@ -9,17 +9,17 @@ import subprocess
 #lets define some things
 #web panel stuff
 webprotocol = "https"
-webpanelport = 8123 # Web access port
-host = "nagisa.gnome.moe" #hostname or IP of proxmox management
-userrole = "vps" #E.g. PVEAdmin
-backupgroup = "vps-backup-users" # usergroup for backup drives?
+webpanelport = 8006 # Web access port
+host = "<host>" #hostname or IP of proxmox management
+userrole = "<user roles>" #E.g. PVEAdmin
+backupgroup = "<group>" # usergroup for backup drives?
 #backend stuff
-port= 8222 # SSH port
-user= "root" #dont use root for fucks sake
-nodeid = "nagisa" #node ID
+port= 22 # SSH port
+user= "<user>" #dont use root for fucks sake
+nodeid = "<node>" #node ID
 templatestorage = "templates" #location of ISO/cache folder (local on new install) 
 templatelocation = "vztmpl" #generally never needs to change
-vmstoragelocation = "sas10k" #default local-zfs or local-lvm on fresh install
+vmstoragelocation = "<datastore>" #default local-zfs or local-lvm on fresh install
 # use SSH keys instead of usename & password
 #below here shouldn't need modifying by end users?
 
