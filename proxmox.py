@@ -22,7 +22,7 @@ templatelocation = "vztmpl" #generally never needs to change
 vmstoragelocation = "<datastore>" #default local-zfs or local-lvm on fresh install
 # use SSH keys instead of usename & password
 #below here shouldn't need modifying by end users?
-
+#testting
 
 #lxcupdate = 'ls /mechmirror/templates/template/cache > /mechmirror/backend/lxcdownloaded.txt' # done manually for now
 #lxcupdate2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcupdate)                             # 
