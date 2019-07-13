@@ -5,20 +5,21 @@ import os
 import time
 import getpass
 import random
+import subprocess
 #lets define some things
 #web panel stuff
 webprotocol = "https"
-webpanelport = 8006 # Web access port
-host = "<host>" #hostname or IP of proxmox management
-userrole = "<user role>" #E.g. PVEAdmin
-backupgroup = "<group>" # usergroup for backup drives?
+webpanelport = 8123 # Web access port
+host = "nagisa.gnome.moe" #hostname or IP of proxmox management
+userrole = "vps" #E.g. PVEAdmin
+backupgroup = "vps-backup-users" # usergroup for backup drives?
 #backend stuff
-port= 22 # SSH port
-user= "<user>" #dont use root for fucks sake
-nodeid = "<node>" #node ID
-templatestorage = "local" #location of ISO/cache folder (local on new install) 
+port= 8222 # SSH port
+user= "root" #dont use root for fucks sake
+nodeid = "nagisa" #node ID
+templatestorage = "templates" #location of ISO/cache folder (local on new install) 
 templatelocation = "vztmpl" #generally never needs to change
-vmstoragelocation = "local-lvm" #default local-zfs or local-lvm on fresh install
+vmstoragelocation = "sas10k" #default local-zfs or local-lvm on fresh install
 # use SSH keys instead of usename & password
 #below here shouldn't need modifying by end users?
 
@@ -227,11 +228,15 @@ if creation in ['create']:
     lxcnetworkcreation = 'LXC %d network has been configured' % (vmid2)
     print(lxcnetworkcreation)    
     time.sleep(5)
+    #backup base configuration/install
+    basebackup1 = 'pvesh create /nodes/nagisa/vzdump -vmid %s -storage baselxc -compress 1 -mode snapshot' % (vmid2)
+    basebackup2 = 'ssh -p %d %s@%s %s' % (port, user, host, basebackup1)
+    completed = subprocess.check_output(basebackup2, shell=True)
     #starting LXC
     print('Starting LXC, wait 10 seconds:')
-    #lxcstart = 'pvesh create /nodes/%s/lxc/%d/status/start' % (nodeid, vmid2)
-    #lxcstart2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcstart)
-    #os.system(lxcstart2)
+    lxcstart = 'pvesh create /nodes/%s/lxc/%d/status/start' % (nodeid, vmid2)
+    lxcstart2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcstart)
+    os.system(lxcstart2)
     time.sleep(10)
     #pulling LXC status
     lxcstatus = 'pvesh get /nodes/%s/lxc/%d/status/current' % (nodeid, vmid2)
@@ -247,26 +252,40 @@ if creation in ['create']:
     def username(message):
         while True:
             try:
-                username = str(input("Please enter a username for web access:\n>"))
+                username = str(input("Please enter a your forename for your user account:\n>"))
             except ValueError:
                 print("Please select a valid input.")
                 continue
             else:
                 return username
                 break
-    username2 = username("Please enter a username for web access:\n>")      
-    usercreation1 = 'pvesh create /access/users --userid %s@pve -password %s -groups %s' % (username2, pass2, backupgroup)
+    username2 = username("Please enter a your forename for your user account:\n>")
+    email1 = str(input("Please enter your email address:\n>"))
+    #email2 = str(input("Please enter your email address again:\n>"))
+    #
+    #
+    # Random number generator here for unique username 4 long
+    #
+    #
+    #uuidoptions = "01234567890"
+    #uuidlen = 4
+    #uuid2 =  "".join(random.sample(uuidoptions ,uuidlen ))
+    #uuid1 = uuid2
+    #
+    usercreation1 = 'pvesh create /access/users --userid %s_%s@pve -password %s -groups %s -email %s' % (username2, vmid2, pass2, backupgroup, email1)
     usercreation2 = 'ssh -p %d %s@%s %s' % (port, user, host, usercreation1)   
     os.system(usercreation2)
-    userpassoutput = 'Your Username is: %s \npassword is: %s' % (username2 ,pass1)
+    userpassoutput = 'Your Username is: %s_%s \npassword is: %s' % (username2, vmid2, pass1)
     print(userpassoutput)
     print("Assigning permissions to LXC")
-    permissions1 = 'pvesh set /access/acl --path /vms/%d --roles %s --users %s@pve' % (vmid2, userrole, username2)
+    permissions1 = 'pvesh set /access/acl --path /vms/%d --roles %s --users %s_%s@pve' % (vmid2, userrole, username2, vmid2)
     permissions2 = 'ssh -p %d %s@%s %s' % (port, user, host, permissions1)   
     os.system(permissions2)
     print("Permissions assigned!")
     weboutput1 = ('Website accessible through %s://%s:%d') % (webprotocol, host, webpanelport)
     print(weboutput1)
+    ipoutput = ('LXC IP address is %s') % (networkingipaddr2)
+    print(ipoutput)
 
 
 
@@ -274,6 +293,8 @@ if creation in ['create']:
 
 elif creation in ['delete']:
     print("ruh roh, you're getting deleted kiddo")
+    print('testing testing 123')
+    #print('returncode:', completed.returncode)
 
 elif creation in ['info']:
     print("Polling system information, please wait!")
