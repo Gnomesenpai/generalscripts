@@ -204,10 +204,18 @@ if creation in ['create']:
         print('No network configuration selected, continuing!')
     initialnetworkvlan = int(input("Please select a VLAN, leave blank for none: "))
     # start password generator
-    passwordoptions = "abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    passlen = 10
-    pass2 =  "".join(random.sample(passwordoptions ,passlen ))
-    pass1 = pass2
+    def randompassword():
+        chars = string.ascii_uppercase + string.ascii_lowercase + string.digits
+        # + string.punctuation
+        #chars = string.printable
+        size = random.randint(10, 10)
+        return ''.join(random.choice(chars) for x in range(size))
+    pass1 = randompassword()
+    
+    #passwordoptions = "abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    #passlen = 10
+    #pass2 =  "".join(random.sample(passwordoptions ,passlen ))
+    #pass1 = pass2
     #print(pass2)
     print('Random password generated!')
     time.sleep(3)
