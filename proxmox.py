@@ -10,17 +10,17 @@ import string
 #lets define some things
 #web panel stuff
 webprotocol = "https"
-webpanelport = 8123 # Web access port
-host = "nagisa.gnome.moe" #hostname or IP of proxmox management
-userrole = "vps" #E.g. PVEAdmin
-backupgroup = "vps-backup-users" # usergroup for backup drives?
+webpanelport = 8006 # Web access port
+host = "<host>" #hostname or IP of proxmox management
+userrole = "PVEAdmin" #E.g. PVEAdmin
+backupgroup = "<usergroup>" # usergroup for backup drives?
 #backend stuff
-port= 8222 # SSH port
+port= 22 # SSH port
 user= "root" # ROOT is required to use pveam/pvesh
-nodeid = "nagisa" #node ID
-templatestorage = "templates" #location of ISO/cache folder (local on new install) 
+nodeid = "<node>" #node ID
+templatestorage = "local" #location of ISO/cache folder (local on new install) 
 templatelocation = "vztmpl" #generally never needs to change
-vmstoragelocation = "sas10k" #default local-zfs or local-lvm on fresh install
+vmstoragelocation = "local-zfs" #default local-zfs or local-lvm on fresh install
 # use SSH keys instead of usename & password
 #below here shouldn't need modifying by end users?
 #testting
