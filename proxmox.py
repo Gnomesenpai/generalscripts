@@ -6,20 +6,21 @@ import time
 import getpass
 import random
 import subprocess
+import string
 #lets define some things
 #web panel stuff
 webprotocol = "https"
-webpanelport = 8006 # Web access port
-host = "<host>" #hostname or IP of proxmox management
-userrole = "<user roles>" #E.g. PVEAdmin
-backupgroup = "<group>" # usergroup for backup drives?
+webpanelport = 8123 # Web access port
+host = "nagisa.gnome.moe" #hostname or IP of proxmox management
+userrole = "vps" #E.g. PVEAdmin
+backupgroup = "vps-backup-users" # usergroup for backup drives?
 #backend stuff
-port= 22 # SSH port
-user= "<user>" #dont use root for fucks sake
-nodeid = "<node>" #node ID
+port= 8222 # SSH port
+user= "root" # ROOT is required to use pveam/pvesh
+nodeid = "nagisa" #node ID
 templatestorage = "templates" #location of ISO/cache folder (local on new install) 
 templatelocation = "vztmpl" #generally never needs to change
-vmstoragelocation = "<datastore>" #default local-zfs or local-lvm on fresh install
+vmstoragelocation = "sas10k" #default local-zfs or local-lvm on fresh install
 # use SSH keys instead of usename & password
 #below here shouldn't need modifying by end users?
 #testting
@@ -143,16 +144,6 @@ if creation in ['create']:
                 break
     hddsize = hdd("Chose HD size in GB: ")
     #end HDD selection
-    
-    #start password creation
-    #pass1 = getpass.getpass('Enter the Root password: ')
-    #pass2 = getpass.getpass('Enter the Root password AGAIN: ')    
-    #if pass2==pass1:
-    #    print("password created")
-    #else:
-    #    print("Password does not match. Please try again")
-    #end password creation
-    
     #VM host/FQDN    
     def vmhostname(message):
         while True:
@@ -210,7 +201,7 @@ if creation in ['create']:
         #chars = string.printable
         size = random.randint(10, 10)
         return ''.join(random.choice(chars) for x in range(size))
-    pass1 = randompassword()
+    pass2 = randompassword()
     
     #passwordoptions = "abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     #passlen = 10
@@ -222,7 +213,7 @@ if creation in ['create']:
     #print(pass1)
     #end password generator
     #print('Creating LXC Container ID %d with Operating system %s') % (vmid2, ostemplateid)
-    finalstring = 'pvesh create /nodes/%s/lxc -vmid %d -hostname %s -storage %s -cores %d -memory %d -swap 0 -ostemplate %s:%s/%s -rootfs %d -unprivileged -password %s -swap 0' % (nodeid, vmid2, vmhostnameid, vmstoragelocation, vcoreid, ramid, templatestorage, templatelocation, ostemplateid, hddsize, pass1) #s-size %d
+    finalstring = 'pvesh create /nodes/%s/lxc -vmid %d -hostname %s -storage %s -cores %d -memory %d -swap 0 -ostemplate %s:%s/%s -rootfs %d -unprivileged -password %s -swap 0' % (nodeid, vmid2, vmhostnameid, vmstoragelocation, vcoreid, ramid, templatestorage, templatelocation, ostemplateid, hddsize, pass2) #s-size %d
     finalstring2 = 'ssh -p %d %s@%s %s' % (port, user, host, finalstring)
     os.system(finalstring2)
     lxccreation = 'LXC %d has been created' % (vmid2)
@@ -251,7 +242,7 @@ if creation in ['create']:
     lxcstatus2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxcstatus)
     os.system(lxcstatus2)
     #print password creation
-    passwordoutput = 'Your Root password is: %s please note it down!' % (pass1)
+    passwordoutput = 'Your Root password is: %s please note it down!' % (pass2)
     print(passwordoutput)
     time.sleep(1)
     #
@@ -275,18 +266,20 @@ if creation in ['create']:
     # Random number generator here for unique username 4 long
     #
     #
-    #uuidoptions = "01234567890"
-    #uuidlen = 4
-    #uuid2 =  "".join(random.sample(uuidoptions ,uuidlen ))
-    #uuid1 = uuid2
-    #
-    usercreation1 = 'pvesh create /access/users --userid %s_%s@pve -password %s -groups %s -email %s' % (username2, vmid2, pass2, backupgroup, email1)
+    #uuid creation
+    uuidoptions = "01234567890"
+    uuidlen = 4
+    uuid2 =  "".join(random.sample(uuidoptions ,uuidlen ))
+    uuid1 = uuid2
+    #end uuid creation
+    #user creation
+    usercreation1 = 'pvesh create /access/users --userid %s_%s@pve -password %s -groups %s -email %s' % (username2, uuid2, pass2, backupgroup, email1)
     usercreation2 = 'ssh -p %d %s@%s %s' % (port, user, host, usercreation1)   
     os.system(usercreation2)
-    userpassoutput = 'Your Username is: %s_%s \npassword is: %s' % (username2, vmid2, pass1)
+    userpassoutput = 'Your Username is: %s_%s \npassword is: %s' % (username2, uuid2, pass2)
     print(userpassoutput)
     print("Assigning permissions to LXC")
-    permissions1 = 'pvesh set /access/acl --path /vms/%d --roles %s --users %s_%s@pve' % (vmid2, userrole, username2, vmid2)
+    permissions1 = 'pvesh set /access/acl --path /vms/%d --roles %s --users %s_%s@pve' % (vmid2, userrole, username2, uuid2)
     permissions2 = 'ssh -p %d %s@%s %s' % (port, user, host, permissions1)   
     os.system(permissions2)
     print("Permissions assigned!")
