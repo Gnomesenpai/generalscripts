@@ -11,13 +11,13 @@ import string
 #web panel stuff
 webprotocol = "https"
 webpanelport = 8006 # Web access port
-host = "<host>" #hostname or IP of proxmox management
+host = "nagisa.gnome.moe" #hostname or IP of proxmox management
 userrole = "PVEAdmin" #E.g. PVEAdmin
 backupgroup = "<usergroup>" # usergroup for backup drives?
 #backend stuff
-port= 22 # SSH port
+port= 8222 # SSH port
 user= "root" # ROOT is required to use pveam/pvesh
-nodeid = "<node>" #node ID
+nodeid = "nagisa" #node ID
 templatestorage = "local" #location of ISO/cache folder (local on new install) 
 templatelocation = "vztmpl" #generally never needs to change
 vmstoragelocation = "local-zfs" #default local-zfs or local-lvm on fresh install
@@ -260,12 +260,7 @@ if creation in ['create']:
                 break
     username2 = username("Please enter a your forename for your user account:\n>")
     email1 = str(input("Please enter your email address:\n>"))
-    #email2 = str(input("Please enter your email address again:\n>"))
-    #
-    #
-    # Random number generator here for unique username 4 long
-    #
-    #
+
     #uuid creation
     uuidoptions = "01234567890"
     uuidlen = 4
@@ -294,7 +289,7 @@ if creation in ['create']:
 
 elif creation in ['delete']:
     print("ruh roh, you're getting deleted kiddo")
-    deletion = str(input("Would you like to create or delete an LXC? Enter Create or delete or type info for information:\n>"))
+    deletion = str(input("Please select the type you would like to delete qemu/lxc:\n>"))
     # AUTHENTICATION NEEDED
     #  POSSIBLE POLLING OF ROOT TO PROVE AUTH?
 
@@ -303,21 +298,23 @@ elif creation in ['delete']:
         qemulist1 = 'pvesh get /nodes/%s/qemu' % (nodeid)
         qemulist2 = 'ssh -p %d %s@%s %s' % (port, user, host, qemulist1)
         os.system(qemulist2)
-        qemudelete = int(input("Please select a VMID"))
-        confirmdelete1 = str(input("Are you sure you wish to continue? (yes/no)")
-        confirmdelete2 = str(input("Are you REALLY sure you wish to continue? (yes/no)")
+        qemudelete = int(input("Please select a VMID: "))
+        confirmdelete1 = str(input("Are you sure you wish to continue? (yes/no): ")).lower()
+        confirmdelete2 = str(input("Are you REALLY sure you wish to continue? (yes/no): ")).lower()
         if ['confirmdelete1 == confirmdelete2']:
             #THIS CODE WILL DELETE THE CHOSEN VM
             qemudelete1 = 'pvesh delete /nodes/%s/qemu/%d' % (nodeid, qemudelete)
-            print('VM %d deleted') % (qemudelete)
+            qemudelete2 = 'ssh -p %d %s@%s %s' % (port, user, host, qemudelete1)
+            print('VM {} deleted'.format(qemudelete))
         else:
+            print("Responses dont match")
     
     elif deletion in ['lxc']:
         print('lxc deletion')
         lxclist1 = 'pvesh get /nodes/%s/lxc' % (nodeid)
         lxclist2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxclist1)
         os.system(lxclist2)
-        lxcdelete = int(input("Please select a VMID"))  
+        lxcdelete = int(input("Please select a VMID: "))  
 
 
     else:
@@ -336,6 +333,12 @@ elif creation in ['info']:
     #get storage information
     proxstorage = "'df -h'"
     proxstorage2 = 'ssh -p %d %s@%s %s' % (port, user, host, proxstorage)
+    #get quemu status
+    qemulist1 = 'pvesh get /nodes/%s/qemu' % (nodeid)
+    qemulist2 = 'ssh -p %d %s@%s %s' % (port, user, host, qemulist1)
+    #get lxc status
+    lxclist1 = 'pvesh get /nodes/%s/lxc' % (nodeid)
+    lxclist2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxclist1)
     print("Proxmox Information:\n")
     os.system(proxversion2)
     print("\n")
@@ -344,6 +347,12 @@ elif creation in ['info']:
     print("\n")
     print("Disk and mapping usage:\n")
     os.system(proxstorage2)
+    print("\n")
+    print("Qemu list:\n")
+    os.system(qemulist2)
+    print("\n")
+    print("LXC list:\n")
+    os.system(lxclist2)
     print("\n")
     #get all VM's version
     #proxvmlist = "'pvesh get /cluster/resources --type vm'"
