@@ -294,7 +294,35 @@ if creation in ['create']:
 
 elif creation in ['delete']:
     print("ruh roh, you're getting deleted kiddo")
-    print('testing testing 123')
+    deletion = str(input("Would you like to create or delete an LXC? Enter Create or delete or type info for information:\n>"))
+    # AUTHENTICATION NEEDED
+    #  POSSIBLE POLLING OF ROOT TO PROVE AUTH?
+
+    if deletion in ['qemu']:
+        print('qemu deletion')
+        qemulist1 = 'pvesh get /nodes/%s/qemu' % (nodeid)
+        qemulist2 = 'ssh -p %d %s@%s %s' % (port, user, host, qemulist1)
+        os.system(qemulist2)
+        qemudelete = int(input("Please select a VMID"))
+        confirmdelete1 = str(input("Are you sure you wish to continue? (yes/no)")
+        confirmdelete2 = str(input("Are you REALLY sure you wish to continue? (yes/no)")
+        if ['confirmdelete1 == confirmdelete2']:
+            #THIS CODE WILL DELETE THE CHOSEN VM
+            qemudelete1 = 'pvesh delete /nodes/%s/qemu/%d' % (nodeid, qemudelete)
+            print('VM %d deleted') % (qemudelete)
+        else:
+    
+    elif deletion in ['lxc']:
+        print('lxc deletion')
+        lxclist1 = 'pvesh get /nodes/%s/lxc' % (nodeid)
+        lxclist2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxclist1)
+        os.system(lxclist2)
+        lxcdelete = int(input("Please select a VMID"))  
+
+
+    else:
+        print('NO OPTION SELECTED, EXITING!')
+
     #print('returncode:', completed.returncode)
 
 elif creation in ['info']:
