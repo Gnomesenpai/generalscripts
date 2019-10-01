@@ -11,11 +11,11 @@ import string
 #web panel stuff
 webprotocol = "https"
 webpanelport = 8006 # Web access port
-host = "nagisa.gnome.moe" #hostname or IP of proxmox management
+host = "<host>" #hostname or IP of proxmox management
 userrole = "PVEAdmin" #E.g. PVEAdmin
 backupgroup = "<usergroup>" # usergroup for backup drives?
 #backend stuff
-port= 8222 # SSH port
+port= 22 # SSH port
 user= "root" # ROOT is required to use pveam/pvesh
 nodeid = "nagisa" #node ID
 templatestorage = "local" #location of ISO/cache folder (local on new install) 
