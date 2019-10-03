@@ -330,19 +330,19 @@ elif creation in ['info']:
     print("Polling system information, please wait!")
     #get pve version
     proxversion = "'pvesh get /version'"
-    proxversion2 = 'ssh -p %d %s@%s %s' % (port, user, host, proxversion)
+    proxversion2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, proxversion)
     #get uptime
     proxuptime = "'uptime'"
-    proxuptime2 = 'ssh -p %d %s@%s %s' % (port, user, host, proxuptime)
+    proxuptime2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, proxuptime)
     #get storage information
     proxstorage = "'df -h'"
-    proxstorage2 = 'ssh -p %d %s@%s %s' % (port, user, host, proxstorage)
+    proxstorage2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, proxstorage)
     #get quemu status
     qemulist1 = 'pvesh get /nodes/%s/qemu' % (nodeid)
-    qemulist2 = 'ssh -p %d %s@%s %s' % (port, user, host, qemulist1)
+    qemulist2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, qemulist1)
     #get lxc status
     lxclist1 = 'pvesh get /nodes/%s/lxc' % (nodeid)
-    lxclist2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxclist1)
+    lxclist2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, lxclist1)
     print("Proxmox Information:\n")
     os.system(proxversion2)
     print("\n")
