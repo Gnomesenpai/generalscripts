@@ -15,8 +15,8 @@ host = "<host>" #hostname or IP of proxmox management
 userrole = "PVEAdmin" #E.g. PVEAdmin
 backupgroup = "<usergroup>" # usergroup for backup drives?
 #backend stuff
-port= 22 # SSH port
-user= "root" # ROOT is required to use pveam/pvesh
+port= 8222 # SSH port
+#user= "root" # ROOT is required to use pveam/pvesh
 nodeid = "nagisa" #node ID
 templatestorage = "local" #location of ISO/cache folder (local on new install) 
 templatelocation = "vztmpl" #generally never needs to change
@@ -40,9 +40,13 @@ vmstoragelocation = "local-zfs" #default local-zfs or local-lvm on fresh install
 #
 
 #pull LXC cache
+
+print("Proxmox Root is required to use API functions.")
+user = str(input("Root login: "))
+pword = getpass.getpass('Password: ')
 print("Updating LXC template cache")
 lxccache = 'pveam update'
-lxccache2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxccache)
+lxccache2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, lxccache)
 os.system(lxccache2)
 print("Done!")
 time.sleep(2)
@@ -68,7 +72,7 @@ if creation in ['create']:
     
     #start template download (optional)
     lxccurrenttemplate = 'pveam available --section system'# % (templatestorage, templatelocation)
-    lxccurrenttemplate2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxccurrenttemplate)
+    lxccurrenttemplate2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, lxccurrenttemplate)
     os.system(lxccurrenttemplate2)
     osdownload = str(input("would you like to download a template? "))
     if osdownload in ['yes']:
