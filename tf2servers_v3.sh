@@ -1,5 +1,5 @@
 #!/bin/bash
-version="Version 1.1"
+version="Version 3.0"
 
 #requires SSH keys
 #requres GNU parallel
