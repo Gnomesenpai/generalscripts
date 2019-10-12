@@ -49,7 +49,7 @@ lxccache = 'pveam update'
 lxccache2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, lxccache)
 os.system(lxccache2)
 print("Done!")
-time.sleep(2)
+time.sleep(1)
 
 #start main program
 creation = str(input("Would you like to create or delete an LXC? Enter Create or delete or type info for information:\n>"))
