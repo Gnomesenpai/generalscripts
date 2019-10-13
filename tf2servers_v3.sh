@@ -6,6 +6,8 @@ version="Version 3.0"
 user1="game"
 host1="uk.moevsmachine.tf"
 #start servers
+#fixes formatting/line ending issues between platforms.
+dos2unix "tf2servers_v3.sh"
 if [ "$1" == "start" ]; then
    
     echo "Starting UK servers."
