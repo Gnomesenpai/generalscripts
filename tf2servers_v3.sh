@@ -1,15 +1,13 @@
 #!/bin/bash
 version="Version 3.0"
-
 #requires SSH keys
 #requres GNU parallel
-
-
 #server details
 user1="game"
 host1="uk.moevsmachine.tf"
-
 #start servers
+#fixes formatting/line ending issues between platforms.
+dos2unix "tf2servers_v3.sh"
 if [ "$1" == "start" ]; then
    
     echo "Starting UK servers."
@@ -21,7 +19,6 @@ if [ "$1" == "start" ]; then
 
 #stop servers
 elif [ "$1" == "stop" ]; then
-    
     echo "Stopping UK servers."
     ssh $user1@$host1 'parallel -k < "/home/game/includes/stoptf2.sh"'
     echo "Servers stopped!"

@@ -51,7 +51,7 @@ lxccache = 'pveam update'
 lxccache2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, lxccache)
 os.system(lxccache2)
 print("Done!")
-time.sleep(2)
+time.sleep(1)
 
 #start main program
 creation = str(input("Would you like to create or delete an LXC? Enter Create or delete or type info for information:\n>"))
@@ -150,6 +150,7 @@ if creation in ['create']:
                 break
     hddsize = hdd("Chose HD size in GB: ")
     #end HDD selection
+
     #VM host/FQDN    
     def vmhostname(message):
         while True:
@@ -162,6 +163,7 @@ if creation in ['create']:
                 return vmhostname
                 break
     vmhostnameid = vmhostname("Enter a FQDN: ")
+
     #networking IF statement
     initialnetwork = str(input("Please select a networking configuration, static/dhcp or blank for none:\n"))
     if initialnetwork in ['static']:
@@ -178,7 +180,7 @@ if creation in ['create']:
                     return networkingipaddr
                     break
         networkingipaddr2 = networkingipaddr("Enter an IP address and CIDR eg 192.168.2.10/24: ")
-        #Inputting gateway
+        #static network gateway
         def networkinggw(message):
             while True:
                 try:
@@ -209,14 +211,8 @@ if creation in ['create']:
         return ''.join(random.choice(chars) for x in range(size))
     pass2 = randompassword()
     
-    #passwordoptions = "abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    #passlen = 10
-    #pass2 =  "".join(random.sample(passwordoptions ,passlen ))
-    #pass1 = pass2
-    #print(pass2)
     print('Random password generated!')
     time.sleep(3)
-    #print(pass1)
     #end password generator
     #print('Creating LXC Container ID %d with Operating system %s') % (vmid2, ostemplateid)
     finalstring = 'pvesh create /nodes/%s/lxc -vmid %d -hostname %s -storage %s -cores %d -memory %d -swap 0 -ostemplate %s:%s/%s -rootfs %d -unprivileged -password %s -swap 0' % (nodeid, vmid2, vmhostnameid, vmstoragelocation, vcoreid, ramid, templatestorage, templatelocation, ostemplateid, hddsize, pass2) #s-size %d
@@ -234,9 +230,9 @@ if creation in ['create']:
     print(lxcnetworkcreation)    
     time.sleep(5)
     #backup base configuration/install
-    basebackup1 = 'pvesh create /nodes/nagisa/vzdump -vmid %s -storage baselxc -compress 1 -mode snapshot' % (vmid2)
-    basebackup2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, basebackup1)
-    completed = subprocess.check_output(basebackup2, shell=True)
+    #basebackup1 = 'pvesh create /nodes/nagisa/vzdump -vmid %s -storage baselxc -compress 1 -mode snapshot' % (vmid2)
+    #basebackup2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, basebackup1)
+    #completed = subprocess.check_output(basebackup2, shell=True)
     #starting LXC
     print('Starting LXC, wait 10 seconds:')
     lxcstart = 'pvesh create /nodes/%s/lxc/%d/status/start' % (nodeid, vmid2)
@@ -307,10 +303,12 @@ elif creation in ['delete']:
         qemudelete = int(input("Please select a VMID: "))
         confirmdelete1 = str(input("Are you sure you wish to continue? (yes/no): ")).lower()
         confirmdelete2 = str(input("Are you REALLY sure you wish to continue? (yes/no): ")).lower()
+        
         if ['confirmdelete1 == confirmdelete2']:
+            deletepw = getpass.getpass('Please re-enter Root password: ')
             #THIS CODE WILL DELETE THE CHOSEN VM
             qemudelete1 = 'pvesh delete /nodes/%s/qemu/%d' % (nodeid, qemudelete)
-            qemudelete2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, qemudelete1)
+            qemudelete2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (deletepw, port, user, host, qemudelete1)
             print('VM {} deleted'.format(qemudelete))
         else:
             print("Responses dont match")
