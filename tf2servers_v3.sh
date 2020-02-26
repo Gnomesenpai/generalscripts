@@ -9,7 +9,6 @@ host1="uk.moevsmachine.tf"
 #fixes formatting/line ending issues between platforms.
 dos2unix "tf2servers_v3.sh"
 if [ "$1" == "start" ]; then
-   
     echo "Starting UK servers."
     ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
     echo "Servers started!"

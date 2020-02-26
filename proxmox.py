@@ -7,20 +7,21 @@ import getpass
 import random
 import subprocess
 import string
+import crypt
 #lets define some things
 #web panel stuff
 webprotocol = "https"
 webpanelport = 8006 # Web access port
-host = "<host>" #hostname or IP of proxmox management
-userrole = "PVEAdmin" #E.g. PVEAdmin
-backupgroup = "<usergroup>" # usergroup for backup drives?
+#host = "nagisa.gnome.moe" #hostname or IP of proxmox management
+userrole = "vps" #E.g. PVEAdmin
+backupgroup = "vps-backup-users" # usergroup for backup drives?
 #backend stuff
-port= 8222 # SSH port
+port= 22 # SSH port
 #user= "root" # ROOT is required to use pveam/pvesh
-nodeid = "nagisa" #node ID
-templatestorage = "local" #location of ISO/cache folder (local on new install) 
+nodeid = "proxmox" #node ID
+templatestorage = "templates" #location of ISO/cache folder (local on new install) 
 templatelocation = "vztmpl" #generally never needs to change
-vmstoragelocation = "local-zfs" #default local-zfs or local-lvm on fresh install
+vmstoragelocation = "sas10k" #default local-zfs or local-lvm on fresh install
 # use SSH keys instead of usename & password
 #below here shouldn't need modifying by end users?
 #testting
@@ -42,6 +43,7 @@ vmstoragelocation = "local-zfs" #default local-zfs or local-lvm on fresh install
 #pull LXC cache
 
 print("Proxmox Root is required to use API functions.")
+host = str(input("hostname/ip: "))
 user = str(input("Root login: "))
 pword = getpass.getpass('Password: ')
 print("Updating LXC template cache")
@@ -199,7 +201,7 @@ if creation in ['create']:
     #end dhcp elif
     else:
         print('No network configuration selected, continuing!')
-    initialnetworkvlan = int(input("Please select a VLAN, leave blank for none: "))
+    initialnetworkvlan = input("Please select a VLAN, leave blank for none: ")
     # start password generator
     def randompassword():
         chars = string.ascii_uppercase + string.ascii_lowercase + string.digits
@@ -208,6 +210,7 @@ if creation in ['create']:
         size = random.randint(10, 10)
         return ''.join(random.choice(chars) for x in range(size))
     pass2 = randompassword()
+    pass3 = randompassword()
     
     print('Random password generated!')
     time.sleep(3)
@@ -220,9 +223,15 @@ if creation in ['create']:
     print(lxccreation)
     time.sleep(5)
     #lets do some networking
-    networstring = 'pvesh set /nodes/%s/lxc/%d/config -net0 bridge=vmbr0,ip=%s,gw=%s,name=eth0,type=veth,tag=%d' % (nodeid, vmid2, networkingipaddr2, networkinggw2, initialnetworkvlan)
+    networstring = 'pvesh set /nodes/%s/lxc/%d/config -net0 bridge=vmbr0,ip=%s,gw=%s,name=eth0,type=veth' % (nodeid, vmid2, networkingipaddr2, networkinggw2, )
     networstring2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, networstring)
     os.system(networstring2)
+    # vlan ,tag=%d
+    if (initialnetworkvlan.isdigit()):
+        print("vlans")
+    else:
+        print("onwards!")
+    # if (x.isDigit())
     #print completion
     lxcnetworkcreation = 'LXC %d network has been configured' % (vmid2)
     print(lxcnetworkcreation)    
@@ -245,6 +254,9 @@ if creation in ['create']:
     passwordoutput = 'Your Root password is: %s please note it down!' % (pass2)
     print(passwordoutput)
     time.sleep(1)
+    print('adding user to lxc')
+
+
     #
     #start of user creation for Proxmox web panel
     #
@@ -268,10 +280,10 @@ if creation in ['create']:
     uuid1 = uuid2
     #end uuid creation
     #user creation
-    usercreation1 = 'pvesh create /access/users --userid %s_%s@pve -password %s -groups %s -email %s' % (username2, uuid2, pass2, backupgroup, email1)
+    usercreation1 = 'pvesh create /access/users --userid %s_%s@pve -password %s -groups %s -email %s' % (username2, uuid2, pass3, backupgroup, email1)
     usercreation2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, usercreation1)   
     os.system(usercreation2)
-    userpassoutput = 'Your Username is: %s_%s \npassword is: %s' % (username2, uuid2, pass2)
+    userpassoutput = 'Your Username is: %s_%s \npassword is: %s' % (username2, uuid2, pass3)
     print(userpassoutput)
     print("Assigning permissions to LXC")
     permissions1 = 'pvesh set /access/acl --path /vms/%d --roles %s --users %s_%s@pve' % (vmid2, userrole, username2, uuid2)
@@ -282,7 +294,12 @@ if creation in ['create']:
     print(weboutput1)
     ipoutput = ('LXC IP address is %s') % (networkingipaddr2)
     print(ipoutput)
-
+    #encrypt lxc root password to sha512 to inject
+    hashpass = crypt.crypt('%s', crypt.mksalt(crypt.METHOD_SHA512)) % (pass2)
+    #inject created lxc root user into LXC
+    lxcuser1 = '/usr/sbin/useradd -m -p %s -s /bin/bash  %s_%s' % (hashpass, username2, uuid2)
+    lxcuser2 = 'pct exec %d -- bash -c %s'  % (vmid2, lxcuser1)
+    os.system(lxcuser1)
 
 
     #string:        pvesh set /access/acl --path /vms/336 --roles vps --users testuser2@pve

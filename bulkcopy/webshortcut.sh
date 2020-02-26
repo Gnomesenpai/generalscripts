@@ -17,7 +17,7 @@ insurgency="${base}/insurgency/insurgency${suffix}"
 parallel cp -vf "${base}/bulkcopy/Webshortcuts.txt" :::  $serverfiles $mvm30wave $maattk $nox10 $tf2ware $vanilla $insurgency
 
 #parallel rsync to LA
-parallel rsync --progress  -vhz "${base}/bulkcopy/Webshortcuts.txt" ::: game@la.moevsmachine.tf:$serverfiles game@la.moevsmachine.tf:$nox10 game@la.moevsmachine.tf:$maattk
+#parallel rsync --progress  -vhz "${base}/bulkcopy/Webshortcuts.txt" ::: game@la.moevsmachine.tf:$serverfiles game@la.moevsmachine.tf:$nox10 game@la.moevsmachine.tf:$maattk
 echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
 echo "-----"
 
