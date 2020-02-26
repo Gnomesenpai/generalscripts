@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #define
-exmemory='/exmemory'
+exmemory='/hgstmirror'
 pve='/etc/pve'
 vps='/mainssd/subvol-100-disk-0/home/game/backup/'
 
