@@ -306,7 +306,7 @@ if creation in ['create']:
 
 elif creation in ['delete']:
     print("ruh roh, you're getting deleted kiddo")
-    deletion = str(input("Please select the type you would like to delete qemu/lxc:\n>"))
+    deletion = str(input("Please select the type you would like to delete qemu/lxc/user:\n>"))
     # AUTHENTICATION NEEDED
     #  POSSIBLE POLLING OF ROOT TO PROVE AUTH?
 
@@ -334,8 +334,29 @@ elif creation in ['delete']:
         lxclist2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, lxclist1)
         os.system(lxclist2)
         lxcdelete = int(input("Please select a VMID: "))  
-
-
+        confirmdelete1 = str(input("Are you sure you wish to continue? (yes/no): ")).lower()
+        confirmdelete2 = str(input("Are you REALLY sure you wish to continue? (yes/no): ")).lower()
+        if ['confirmdelete1 == confirmdelete2']:
+            #THIS CODE WILL DELETE THE CHOSEN LXC
+            #STOP THE LXC
+            lxcstop1 = 'pvesh create /nodes/%s/lxc/%d/status/stop' % (nodeid, lxcdelete)
+            lxcstop2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, lxcstop1)
+            os.system(lxcstop2)
+            time.sleep(2)
+            #GET LXC STATUS
+            lxcstatus = 'pvesh get /nodes/%s/lxc/%d/status/current' % (nodeid, lxcdelete)
+            lxcstatus2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, lxcstatus)
+            os.system(lxcstatus2)
+            #DELETE THE LXC
+            lxcdelete1 = 'pvesh delete /nodes/%s/lxc/%d' % (nodeid, lxcdelete)
+            lxcdelete2 = 'sshpass -p %s ssh -p %d %s@%s %s' % (pword, port, user, host, lxcdelete1)
+            os.system(lxcdelete2)
+            print('VM {} deleted'.format(lxcdelete))
+            print("yeet")
+        else:
+            print("Responses dont match")
+    elif deletion in ['user']:
+        print("User deletion")
     else:
         print('NO OPTION SELECTED, EXITING!')
 
