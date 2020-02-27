@@ -1,37 +1,37 @@
 #!/bin/bash
 
 #define
-exmemory='/hgstmirror'
+backupdir='/hgstmirror'
 pve='/etc/pve'
 vps='/mainssd/subvol-100-disk-0/home/game/backup/'
 
 #kvm backups
-cp -Rv $pve/qemu-server/ $exmemory/backup/
+cp -Rv $pve/qemu-server/ $backupdir/backup/
 
 #lxc backup
-cp -Rv $pve/lxc/ $exmemory/backup/
+cp -Rv $pve/lxc/ $backupdir/backup/
 
 #interface backups
-cp -Rv /etc/network/interfaces $exmemory/backup/
+cp -Rv /etc/network/interfaces $backupdir/backup/
 
 #copy backup to another location? rysnc maybe?
 #cp -Rv /exmemory/backup /exmemory/backup2/
 
 #copy this script to backup
-cp -v $exmemory/configbackup.sh $exmemory/backup/
+cp -v $backupdir/configbackup.sh $backupdir/backup/
 
 #set permissions
-chmod 777 $exmemory/backup
+chmod 777 -R $backupdir/backup
 
 #Remove TARGZ archives
-rm /exmemory/backup.tar.gz
+rm $backupdir/backup.tar.gz
 rm $vps/backup.tar.gz
 
 # TARGZ
-tar -zcvf $exmemory/backup.tar.gz $exmemory/backup/
+tar -zcvf $backupdir/backup.tar.gz $backupdir/backup/
 
 #copy to VPS for external backup
-cp -vf  $exmemory/backup.tar.gz $vps
+cp -vf  $backupdir/backup.tar.gz $vps
 
 
 echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
