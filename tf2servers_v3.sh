@@ -66,6 +66,7 @@ elif [ "$1" == "info" ]; then
     echo "RAM Usage"
     ssh $user1@$host1 'free -h'  
 
+#start ALL core servers/services
 elif [ "$1" == "startup" ]; then
     echo "Starting Discord bot"
     echo ""
@@ -74,12 +75,32 @@ elif [ "$1" == "startup" ]; then
     echo ""
     ssh $user1@$host1 '/home/game/mc_perfectlycomplex.sh'
     echo "Starting TF2 Servers."
-    #ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
+    ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
     echo "Servers started!"
     echo ""
     echo "Starting Insurgency servers"
-    ssh $user1@$host1 '/home/game/insserver start'
-    ssh $user1@$host1 '/home/game/insserver_1 start'
+    ssh $user1@$host1 '/home/game/insserver start; /home/game/insserver_1 start'
+
+    echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
+    echo "-----"
+
+#stop ALL core servers/services
+elif [ "$1" == "shutdown" ]; then
+    echo "Stopping Discord bot"
+    echo ""
+    echo "REQUIRES MANUAL SHUTDOWN"
+    #ssh $user1@$host1 '/home/game/start_discord.sh'
+    echo "Stopping Minecraft Server"
+    echo ""
+    echo "REQUIRES MANUAL SHUTDOWN"
+    #ssh $user1@$host1 '/home/game/mc_perfectlycomplex.sh'
+    echo "Stopping TF2 Servers."
+    ssh $user1@$host1 'parallel -k < "/home/game/includes/stoptf2.sh"'
+    echo "Servers down!"
+    echo ""
+    echo "Stopping Insurgency servers"
+    ssh $user1@$host1 '/home/game/insserver stop; /home/game/insserver_1 stop'
+
     echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
     echo "-----"
 
@@ -93,6 +114,8 @@ else
     echo -e "\tUpdate    -   update TF2 servers"
     echo -e "\tRestart   -   restart TF2 servers"
     echo -e "\tInfo      -   Pull local disk usage, memory usage & load average"
+    echo -e "\tStartup   -   Start all core servers/services"
+    echo -e "\tShutdown   -   Start all core servers/services"
     echo ""
     echo "$version"
     echo ""
