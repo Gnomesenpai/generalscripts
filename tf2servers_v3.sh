@@ -66,6 +66,23 @@ elif [ "$1" == "info" ]; then
     echo "RAM Usage"
     ssh $user1@$host1 'free -h'  
 
+elif [ "$1" == "startup" ]; then
+    echo "Starting Discord bot"
+    echo ""
+    ssh $user1@$host1 '/home/game/start_discord.sh'
+    echo "Starting Minecraft Server"
+    echo ""
+    ssh $user1@$host1 '/home/game/mc_perfectlycomplex.sh'
+    echo "Starting TF2 Servers."
+    #ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
+    echo "Servers started!"
+    echo ""
+    echo "Starting Insurgency servers"
+    ssh $user1@$host1 '/home/game/insserver start'
+    ssh $user1@$host1 '/home/game/insserver_1 start'
+    echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
+    echo "-----"
+
 #print options
 else
     echo ""
