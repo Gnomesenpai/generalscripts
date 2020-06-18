@@ -6,8 +6,8 @@
 ./asteroid_1 stop
 ./asteroid_1 start
 
-./mgemod_1 stop
-./mgemod_1 start
+#./mgemod_1 stop
+#./mgemod_1 start
 
 ./orange stop
 ./orange start
