@@ -43,7 +43,7 @@ elif [ "$1" == "update" ]; then
 #reboot servers
 elif [ "$1" == "restart" ]; then
 
-    echo "Inb4 localisation files, updating servers!"
+    echo "Restarting all servers!"
     echo "Stopping the servers"       #stop them
     ssh $user1@$host1 'parallel -k < "/home/game/includes/stoptf2.sh"'
     echo  "Starting the servers"      #start them again
@@ -68,6 +68,9 @@ elif [ "$1" == "info" ]; then
 
 #start ALL core servers/services
 elif [ "$1" == "startup" ]; then
+    echo "Starting Hlstatsx"
+    echo ""
+    ssh $user1@$host1 '/home/game/statsscripts/run_hlstats start'
     echo "Starting Discord bot"
     echo ""
     ssh $user1@$host1 '/home/game/start_discord.sh'
@@ -80,7 +83,9 @@ elif [ "$1" == "startup" ]; then
     echo ""
     echo "Starting Insurgency servers"
     ssh $user1@$host1 '/home/game/insserver start; /home/game/insserver_1 start'
-
+    echo ""
+    echo "Starting L4D2 servers"
+    ssh $user1@$host1 '/home/game/l4d2_1.sh; /home/game/l4d2_2.sh; /home/game/l4d2_3.sh;'
     echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
     echo "-----"
 

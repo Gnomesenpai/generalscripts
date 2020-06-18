@@ -11,14 +11,14 @@ import crypt
 #lets define some things
 #web panel stuff
 webprotocol = "https"
-webpanelport = 8006 # Web access port
+webpanelport = 8123 # Web access port
 #host = "nagisa.gnome.moe" #hostname or IP of proxmox management
 userrole = "vps" #E.g. PVEAdmin
 backupgroup = "vps-backup-users" # usergroup for backup drives?
 #backend stuff
-port= 22 # SSH port
-#user= "root" # ROOT is required to use pveam/pvesh
-nodeid = "proxmox" #node ID
+port= 8222 # SSH port
+user= "root" # ROOT is required to use pveam/pvesh
+nodeid = "nagisa" #node ID
 templatestorage = "templates" #location of ISO/cache folder (local on new install) 
 templatelocation = "vztmpl" #generally never needs to change
 vmstoragelocation = "sas10k" #default local-zfs or local-lvm on fresh install
@@ -44,7 +44,7 @@ vmstoragelocation = "sas10k" #default local-zfs or local-lvm on fresh install
 
 print("Proxmox Root is required to use API functions.")
 host = str(input("hostname/ip: "))
-user = str(input("Root login: "))
+#user = str(input("Root login: "))
 pword = getpass.getpass('Password: ')
 print("Updating LXC template cache")
 lxccache = 'pveam update'

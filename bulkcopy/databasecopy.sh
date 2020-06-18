@@ -12,9 +12,9 @@ nox10="${base}/tf2_nox10/tf${suffix}"
 tf2ware="${base}/tf2_tf2ware/tf${suffix}"
 vanilla="${base}/tf2_machine_attacks/tf${suffix}"
 insurgency="${base}/insurgency/insurgency${suffix}"
-
+l4d2="${base}/l4d2_srv/left4dead2/${suffix}"
 #use parallel cp to mass copy Webshortcuts.txt
-parallel cp -vf "${base}/bulkcopy/databases.cfg" :::  $serverfiles $mvm30wave $maattk $nox10 $tf2ware $vanilla $insurgency
+parallel cp -vf "${base}/bulkcopy/databases.cfg" :::  $serverfiles $mvm30wave $maattk $nox10 $tf2ware $vanilla $insurgency $l4d2
 
 #parallel rsync to LA
 #parallel rsync --progress  -vhz "${base}/Webshortcuts.txt" ::: game@la.moevsmachine.tf:$serverfiles game@la.moevsmachine.tf:$nox10 game@la.moevsmachine.tf:$maattk

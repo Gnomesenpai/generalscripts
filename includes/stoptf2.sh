@@ -17,7 +17,7 @@
 /home/game/orange stop
 /home/game/mvmx20_1 stop
 /home/game/mvm_ma_2 stop
-
+/home/game/lanops_tf2_1 stop
 
 
 #echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
