@@ -18,7 +18,7 @@ backupgroup = "vps-backup-users" # usergroup for backup drives?
 #backend stuff
 port= 8222 # SSH port
 user= "root" # ROOT is required to use pveam/pvesh
-nodeid = "nagisa" #node ID
+nodeid = "miku" #node ID
 templatestorage = "templates" #location of ISO/cache folder (local on new install) 
 templatelocation = "vztmpl" #generally never needs to change
 vmstoragelocation = "sas10k" #default local-zfs or local-lvm on fresh install
@@ -319,7 +319,7 @@ elif creation in ['delete']:
         confirmdelete1 = str(input("Are you sure you wish to continue? (yes/no): ")).lower()
         confirmdelete2 = str(input("Are you REALLY sure you wish to continue? (yes/no): ")).lower()
         
-        if ['confirmdelete1 == confirmdelete2']:
+        if confirmdelete1 == 'yes' and confirmdelete2 == 'yes'::
             deletepw = getpass.getpass('Please re-enter Root password: ')
             #THIS CODE WILL DELETE THE CHOSEN VM
             qemudelete1 = 'pvesh delete /nodes/%s/qemu/%d' % (nodeid, qemudelete)
@@ -336,7 +336,7 @@ elif creation in ['delete']:
         lxcdelete = int(input("Please select a VMID: "))  
         confirmdelete1 = str(input("Are you sure you wish to continue? (yes/no): ")).lower()
         confirmdelete2 = str(input("Are you REALLY sure you wish to continue? (yes/no): ")).lower()
-        if ['confirmdelete1 == confirmdelete2']:
+        if confirmdelete1 == 'yes' and confirmdelete2 == 'yes':
             #THIS CODE WILL DELETE THE CHOSEN LXC
             #STOP THE LXC
             lxcstop1 = 'pvesh create /nodes/%s/lxc/%d/status/stop' % (nodeid, lxcdelete)
