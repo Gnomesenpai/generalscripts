@@ -74,9 +74,9 @@ elif [ "$1" == "startup" ]; then
     echo "Starting Discord bot"
     echo ""
     ssh $user1@$host1 '/home/game/start_discord.sh'
-    echo "Starting Minecraft Server"
+    #echo "Starting Minecraft Server"
     echo ""
-    ssh $user1@$host1 '/home/game/mc_perfectlycomplex.sh'
+    #ssh $user1@$host1 '/home/game/mc_perfectlycomplex.sh'
     echo "Starting TF2 Servers."
     ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
     echo "Servers started!"
