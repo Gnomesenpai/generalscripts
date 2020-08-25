@@ -18,3 +18,5 @@ if confirmdelete1 == 'yes' and confirmdelete2 == 'yes':
 else:
     print("Responses dont match")
     exit()
+
+#this isnt finished
