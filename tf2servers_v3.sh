@@ -1,5 +1,5 @@
 #!/bin/bash
-version="Version 3.0.1"
+version="Version 3.0.2"
 #requires SSH keys
 #requres GNU parallel
 #server details
@@ -8,6 +8,7 @@ host1="uk.moevsmachine.tf"
 #start servers
 #fixes formatting/line ending issues between platforms.
 dos2unix "tf2servers_v3.sh"
+#start main funtions
 if [ "$1" == "start" ]; then
     echo "Starting UK servers."
     ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
@@ -108,6 +109,8 @@ elif [ "$1" == "shutdown" ]; then
 
     echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
     echo "-----"
+elif [ "$1" == "mirror" ]; then
+    echo "Mirror Information"
 
 #print options
 else
@@ -120,7 +123,8 @@ else
     echo -e "\tRestart   -   Restart TF2 servers"
     echo -e "\tInfo      -   Pull local disk usage, memory usage & load average"
     echo -e "\tStartup   -   Start all core servers/services"
-    echo -e "\tShutdown   -  Stop all core servers/services"
+    echo -e "\tShutdown  -   Stop all core servers/services"
+    echo -e "\tMirror   -    Pull TF2C mirror information"
     echo ""
     echo "$version"
     echo ""
