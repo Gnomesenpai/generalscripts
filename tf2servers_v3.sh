@@ -1,5 +1,5 @@
 #!/bin/bash
-version="Version 3.0"
+version="Version 3.0.1"
 #requires SSH keys
 #requres GNU parallel
 #server details
@@ -114,10 +114,10 @@ else
     echo ""
     echo "Available Options:"
     echo ""
-    echo -e "\tStart     -   start TF2 servers"
-    echo -e "\tStop      -   stop TF2 servers"
-    echo -e "\tUpdate    -   update TF2 servers"
-    echo -e "\tRestart   -   restart TF2 servers"
+    echo -e "\tStart     -   Start TF2 servers"
+    echo -e "\tStop      -   Stop TF2 servers"
+    echo -e "\tUpdate    -   Update TF2 servers"
+    echo -e "\tRestart   -   Restart TF2 servers"
     echo -e "\tInfo      -   Pull local disk usage, memory usage & load average"
     echo -e "\tStartup   -   Start all core servers/services"
     echo -e "\tShutdown   -  Stop all core servers/services"
