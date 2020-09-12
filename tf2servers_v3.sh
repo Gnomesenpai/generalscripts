@@ -120,7 +120,7 @@ else
     echo -e "\tRestart   -   restart TF2 servers"
     echo -e "\tInfo      -   Pull local disk usage, memory usage & load average"
     echo -e "\tStartup   -   Start all core servers/services"
-    echo -e "\tShutdown   -   Start all core servers/services"
+    echo -e "\tShutdown   -   Stop all core servers/services"
     echo ""
     echo "$version"
     echo ""
