@@ -1,10 +1,12 @@
 #!/bin/bash
-version="Version 3.0.2"
+version="Version 3.1.0"
 #requires SSH keys
 #requres GNU parallel
 #server details
 user1="game"
 host1="uk.moevsmachine.tf"
+host2="vps.moevsmachine.tf"
+host3="miku.gnome.moe"
 #start servers
 #fixes formatting/line ending issues between platforms.
 dos2unix "tf2servers_v3.sh"
@@ -111,6 +113,39 @@ elif [ "$1" == "shutdown" ]; then
     echo "-----"
 elif [ "$1" == "mirror" ]; then
     echo "Mirror Information"
+    echo ""
+    read -p 'VPS Login: ' user2
+    read -sp 'VPS Password: ' user2pass 
+    echo ""
+    echo ""
+    echo "Uptime"
+    sshpass -p $user2pass ssh $user2@$host2 'uptime'
+    #pword, port, user, host, permissions1
+    echo ""
+    echo "File System Usage"
+    sshpass -p $user2pass ssh $user2@$host2 'df -h'
+    echo ""
+    echo "RAM Usage"
+    sshpass -p $user2pass ssh $user2@$host2 'free -h'  
+#Proxmox Host
+#elif [ "$1" == "host" ]; then
+#    echo "Host Information"
+#    echo ""
+#    read -p 'Host Login: ' user3
+#    read -sp 'Host Password: ' user3pass
+#    port="8222" 
+#    echo ""
+#    echo ""
+#    echo "Uptime"
+#    sshpass -p $user3pass ssh -p $port $user3@$host3 'uptime'
+#    #pword, port, user, host, permissions1
+#    echo ""
+#    echo "File System Usage"
+#    sshpass -p $user3pass ssh -p $port $user3@$host3 'df -h'
+#    echo ""
+#    echo "RAM Usage"
+#    sshpass -p $user3pass ssh -p $port $user3@$host3 'free -h'  
+
 
 #print options
 else
@@ -124,7 +159,8 @@ else
     echo -e "\tInfo      -   Pull local disk usage, memory usage & load average"
     echo -e "\tStartup   -   Start all core servers/services"
     echo -e "\tShutdown  -   Stop all core servers/services"
-    echo -e "\tMirror   -    Pull TF2C mirror information"
+    echo -e "\tMirror    -   Pull TF2C mirror information"
+    echo -e "\tHost      -   Pull host information - BROKEN"
     echo ""
     echo "$version"
     echo ""
