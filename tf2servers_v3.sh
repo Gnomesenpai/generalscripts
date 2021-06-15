@@ -1,14 +1,16 @@
 #!/bin/bash
-version="Version 3.1.0"
+version="Version 3.1.2"
 #requires SSH keys
 #requres GNU parallel
+#optinal - dos2unix
 #server details
 user1="game"
 host1="uk.moevsmachine.tf"
 host2="vps.moevsmachine.tf"
 host3="miku.gnome.moe"
-#start servers
-dos2unix "tf2servers_v3.sh" #fixes formatting/line ending issues between platforms.
+echo "Current Filename: $(basename $BASH_SOURCE)"
+echo ""
+dos2unix $(basename $BASH_SOURCE) #fixes formatting/line ending issues between platforms.
 echo ""
 #start main funtions
 if [ "$1" == "start" ]; then
