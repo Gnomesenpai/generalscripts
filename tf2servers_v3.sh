@@ -121,16 +121,23 @@ elif [ "$1" == "info" ]; then
     ssh $user1@$host1 'df -h'
     echo ""
     echo "RAM Usage"
-    ssh $user1@$host1 'free -h'  
+    ssh $user1@$host1 'free -h'
+    echo ""
+    echo "Pulling running screens" 
+    ssh $user1@$host1 'screen -list'
 
 #start ALL core servers/services
 elif [ "$1" == "startup" ]; then
     echo "Starting Hlstatsx"
     echo ""
     ssh $user1@$host1 '/home/game/statsscripts/run_hlstats start'
-    echo "Starting Discord bot"
+    echo "Starting TF2 Discord bot"
     echo ""
     ssh $user1@$host1 '/home/game/start_discord.sh'
+    echo "Starting L4D2 Discord bot"
+    echo ""
+    ssh $user1@$host1 '/home/game/start_l4d2_chat.sh'
+    ssh $user1@$host1 'screen -list | grep "discord"'
     #echo "Starting Minecraft Server"
     #echo ""
     #ssh $user1@$host1 'cd /home/game/minecraft6/ && ./startmc.sh'
@@ -149,12 +156,15 @@ elif [ "$1" == "startup" ]; then
 
 #stop ALL core servers/services
 elif [ "$1" == "shutdown" ]; then
-    echo "Stopping Discord bot"
+    echo "Stopping TF2 Discord bot"
     echo ""
     ssh $user1@$host1 'screen -S discordbot -X quit'
+    echo "Stopping L4D2 Discord bot"
+    echo ""
+    ssh $user1@$host1 'screen -S l4d2_discordbot -X quit'
     #echo "Stopping Minecraft Server"
     #echo ""
-    #ssh $user1@$host1 'screen -S discordbot -X quit'
+    #ssh $user1@$host1 'screen -S minecraft -p 0 -X stuff "stop^M"'
     #echo "REQUIRES MANUAL SHUTDOWN"
     echo "Stopping TF2 Servers."
     ssh $user1@$host1 'parallel -k < "/home/game/includes/stoptf2.sh"'
