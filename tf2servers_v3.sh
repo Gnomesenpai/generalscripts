@@ -138,9 +138,9 @@ elif [ "$1" == "startup" ]; then
     echo ""
     ssh $user1@$host1 '/home/game/start_l4d2_chat.sh'
     ssh $user1@$host1 'screen -list | grep "discord"'
-    #echo "Starting Minecraft Server"
-    #echo ""
-    #ssh $user1@$host1 'cd /home/game/minecraft6/ && ./startmc.sh'
+    echo "Starting Minecraft Server"
+    echo ""
+    ssh $user1@$host1 'cd /home/game/minecraft6/ && ./startmc.sh'
     echo "Starting TF2 Servers."
     ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
     echo "Servers started!"
@@ -162,9 +162,9 @@ elif [ "$1" == "shutdown" ]; then
     echo "Stopping L4D2 Discord bot"
     echo ""
     ssh $user1@$host1 'screen -S l4d2_discordbot -X quit'
-    #echo "Stopping Minecraft Server"
-    #echo ""
-    #ssh $user1@$host1 'screen -S minecraft -p 0 -X stuff "stop^M"'
+    echo "Stopping Minecraft Server"
+    echo ""
+    ssh $user1@$host1 'screen -S minecraft -p 0 -X stuff "stop^M"'
     #echo "REQUIRES MANUAL SHUTDOWN"
     echo "Stopping TF2 Servers."
     ssh $user1@$host1 'parallel -k < "/home/game/includes/stoptf2.sh"'
