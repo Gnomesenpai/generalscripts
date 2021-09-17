@@ -57,7 +57,7 @@ elif [ "$1" == "update" ]; then
         echo "Stopping the servers"       #stop them
         ssh $user1@$host1 'parallel -k < "/home/game/includes/stoptf2.sh"'
         echo "Running update script"      #run the update script
-        ssh $user1@$host1 '/home/game/mvmx10_7_machine_attacks update; /home/game/mvmx10_1 update; /home/game/mvmx10_3 update; /home/game/cactuscanyon_1 update'
+        ssh $user1@$host1 '/home/game/mvmx10_7_machine_attacks update; /home/game/mvmx10_1 update; /home/game/mvmx10_3 update; /home/game/cactuscanyon_1 update; /home/game/mvmx10_4 update; /home/game/mvmx10_6 update'
         echo  "Starting the servers"      #start them again
         ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
         echo ""
