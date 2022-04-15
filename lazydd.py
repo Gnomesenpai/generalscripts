@@ -8,22 +8,36 @@
 #
 import os
 import string
-print("This script required hwinfo")
-print("THIS UTILITY CAN WIPE ALL DATA!!!!!!")
-confirmdelete1 = str(input("Are you sure you wish to continue? (yes/no): ")).lower()
+import getpass
+import time
+print("This script requires ROOT")
+time.sleep(1)
+usercheck = os.popen('whoami').read() 
+print(usercheck)
 
-confirmdelete2 = str(input("Are you REALLY sure you wish to continue? (yes/no): ")).lower()
 
 
-if confirmdelete1 == 'yes' and confirmdelete2 == 'yes':
-    print("responses match")
-    #fdisk = 'fdisk --list | grep  "Disk /dev/" | grep -v  -i 'Partition 2''
-    diskinfo = 'hwinfo --disk --short'
 
-    #os.system(fdisk)
-    os.system(diskinfo)
-else:
-    print("Responses dont match")
+if usercheck == 'root':
+    print("This script requires hwinfo")
+    print("THIS UTILITY CAN WIPE ALL DATA!!!!!!")
+    confirmdelete1 = str(input("Are you sure you wish to continue? (yes/no): ")).lower()
+
+    confirmdelete2 = str(input("Are you REALLY sure you wish to continue? (yes/no): ")).lower()
+    print ("yes")
+    if confirmdelete1 == 'yes' and confirmdelete2 == 'yes':
+        print("responses match")
+        #fdisk = 'fdisk --list | grep  "Disk /dev/" | grep -v  -i 'Partition 2''
+        diskinfo = 'hwinfo --disk --short'
+
+        #os.system(fdisk)
+        os.system(diskinfo)
+    else:
+        print("Responses dont match")
+        exit()
+
+else:   
+    print("Not root! Exiting...")
     exit()
 
 #this isnt finished
