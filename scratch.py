@@ -8,7 +8,7 @@ import random
 #lets define some things
 #web panel stuff
 
-
+#testing
 #start template download (optional)
 lxccurrenttemplate = 'pveam available --section system'# % (templatestorage, templatelocation)
 lxccurrenttemplate2 = 'ssh -p %d %s@%s %s' % (port, user, host, lxccurrenttemplate)
