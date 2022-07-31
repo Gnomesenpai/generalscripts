@@ -23,9 +23,9 @@ if [ "$1" == "start" ]; then
         echo "-----"
     elif [ "$2" == "l4d2" ]; then
         echo "Starting the servers"       #start them
-        ssh $user1@$host1 '/home/game/l4d2_1.sh && sleep 10s && /home/game/l4d2_2.sh && sleep 10s && /home/game/l4d2_3.sh && sleep 10s && /home/game/l4d2_4.sh;'
+        #ssh $user1@$host1 '/home/game/l4d2_1.sh && sleep 10s && /home/game/l4d2_2.sh && sleep 10s && /home/game/l4d2_3.sh && sleep 10s && /home/game/l4d2_4.sh;'
         echo ""
-        ssh $user1@$host1 'screen -list | grep "l4d2"'
+        #ssh $user1@$host1 'screen -list | grep "l4d2"'
     else
         echo "No option selected"
         echo -e "\tstart tf2      -   Start TF2 servers"
@@ -42,7 +42,7 @@ elif [ "$1" == "stop" ]; then
         echo "-----"
     elif [ "$2" == "l4d2" ]; then
         echo "Stopping the servers"       #stop them
-        ssh $user1@$host1 'screen -S l4d2_1 -X quit; screen -S l4d2_2 -X quit; screen -S l4d2_3 -X quit; screen -S l4d2_4 -X quit'
+        #ssh $user1@$host1 'screen -S l4d2_1 -X quit; screen -S l4d2_2 -X quit; screen -S l4d2_3 -X quit; screen -S l4d2_4 -X quit'
     else
         echo "No option selected"
         echo -e "\tstop tf2      -   Stop TF2 servers"
@@ -57,7 +57,7 @@ elif [ "$1" == "update" ]; then
         echo "Stopping the servers"       #stop them
         ssh $user1@$host1 'parallel -k < "/home/game/includes/stoptf2.sh"'
         echo "Running update script"      #run the update script
-        ssh $user1@$host1 '/home/game/mvmx10_7_machine_attacks update; /home/game/mvmx10_1 update; /home/game/mvmx10_3 update; /home/game/cactuscanyon_1 update; /home/game/mvmx10_4 update; /home/game/mvmx10_6 update'
+        ssh $user1@$host1 '/home/game/mvmx10_7_machine_attacks update; /home/game/mvmx10_1 update; /home/game/mvmx10_3 update; /home/game/tf2_betamaps update; /home/game/mvmx10_4 update; /home/game/mvmx10_6 update'
         echo  "Starting the servers"      #start them again
         ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
         echo ""
@@ -67,13 +67,13 @@ elif [ "$1" == "update" ]; then
         echo "updating L4D2"
         sleep 5s
         echo "Stopping the servers"       #stop them
-        ssh $user1@$host1 'screen -S l4d2_1 -X quit; screen -S l4d2_2 -X quit; screen -S l4d2_3 -X quit; screen -S l4d2_4 -X quit'
-        echo "Running update script, this will freeze on waiting for user info..."      #run the update script
-        ssh $user1@$host1 '/home/game/includes/update_l4d2.sh'
+        #ssh $user1@$host1 'screen -S l4d2_1 -X quit; screen -S l4d2_2 -X quit; screen -S l4d2_3 -X quit; screen -S l4d2_4 -X quit'
+        #echo "Running update script, this will freeze on waiting for user info..."      #run the update script
+        #ssh $user1@$host1 '/home/game/includes/update_l4d2.sh'
         echo  "Starting the servers"      #start them again
-        ssh $user1@$host1 '/home/game/l4d2_1.sh && sleep 10s && /home/game/l4d2_2.sh && sleep 10s && /home/game/l4d2_3.sh && sleep 10s && /home/game/l4d2_4.sh;'
+        #ssh $user1@$host1 '/home/game/l4d2_1.sh && sleep 10s && /home/game/l4d2_2.sh && sleep 10s && /home/game/l4d2_3.sh && sleep 10s && /home/game/l4d2_4.sh;'
         echo "Checking status"
-        ssh $user1@$host1 'screen -list | grep "l4d2"'
+        #ssh $user1@$host1 'screen -list | grep "l4d2"'
         echo ""
         echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
         echo "-----"
@@ -98,11 +98,11 @@ elif [ "$1" == "restart" ]; then
     elif [ "$2" == "l4d2" ]; then
         echo "Restarting L4D2 severs!"
         echo "Stopping the servers"       #stop them
-        ssh $user1@$host1 'screen -S l4d2_1 -X quit; screen -S l4d2_2 -X quit; screen -S l4d2_3 -X quit; screen -S l4d2_4 -X quit'
+        #ssh $user1@$host1 'screen -S l4d2_1 -X quit; screen -S l4d2_2 -X quit; screen -S l4d2_3 -X quit; screen -S l4d2_4 -X quit'
         echo "Starting L4D2 servers"
-        ssh $user1@$host1 '/home/game/l4d2_1.sh && sleep 10s && /home/game/l4d2_2.sh && sleep 10s && /home/game/l4d2_3.sh && sleep 10s && /home/game/l4d2_4.sh;'
+        #ssh $user1@$host1 '/home/game/l4d2_1.sh && sleep 10s && /home/game/l4d2_2.sh && sleep 10s && /home/game/l4d2_3.sh && sleep 10s && /home/game/l4d2_4.sh;'
         echo ""
-        ssh $user1@$host1 'screen -list | grep "l4d2"'
+        #ssh $user1@$host1 'screen -list | grep "l4d2"'
     else
         echo "no option selected"
         echo -e "\trestart tf2      -   Restart TF2 servers"
@@ -134,13 +134,13 @@ elif [ "$1" == "startup" ]; then
     echo "Starting TF2 Discord bot"
     echo ""
     ssh $user1@$host1 '/home/game/start_discord.sh'
-    echo "Starting L4D2 Discord bot"
-    echo ""
-    ssh $user1@$host1 '/home/game/start_l4d2_chat.sh'
-    ssh $user1@$host1 'screen -list | grep "discord"'
-    echo "Starting Minecraft Server"
-    echo ""
-    ssh $user1@$host1 'cd /home/game/minecraft6/ && ./startmc.sh'
+   # echo "Starting L4D2 Discord bot"
+    #echo ""
+    #ssh $user1@$host1 '/home/game/start_l4d2_chat.sh'
+    #ssh $user1@$host1 'screen -list | grep "discord"'
+    #echo "Starting Minecraft Server"
+    #echo ""
+    #ssh $user1@$host1 'cd /home/game/minecraft6/ && ./startmc.sh'
     echo "Starting TF2 Servers."
     ssh $user1@$host1 'parallel -k < "/home/game/includes/starttf2.sh"'
     echo "Servers started!"
@@ -149,8 +149,8 @@ elif [ "$1" == "startup" ]; then
     #ssh $user1@$host1 '/home/game/insserver start; /home/game/insserver_1 start'
     #echo ""
     echo "Starting L4D2 servers"
-    ssh $user1@$host1 '/home/game/l4d2_1.sh && sleep 10s && /home/game/l4d2_2.sh && sleep 10s && /home/game/l4d2_3.sh && sleep 10s && /home/game/l4d2_4.sh;'
-    ssh $user1@$host1 'screen -list'
+    #ssh $user1@$host1 '/home/game/l4d2_1.sh && sleep 10s && /home/game/l4d2_2.sh && sleep 10s && /home/game/l4d2_3.sh && sleep 10s && /home/game/l4d2_4.sh;'
+    #ssh $user1@$host1 'screen -list'
     echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
     echo "-----"
 
@@ -173,7 +173,7 @@ elif [ "$1" == "shutdown" ]; then
     #echo "Stopping Insurgency servers"
     #ssh $user1@$host1 '/home/game/insserver stop; /home/game/insserver_1 stop'
     echo "Stopping the L4D2 servers"       #stop them
-    ssh $user1@$host1 'screen -S l4d2_1 -X quit; screen -S l4d2_2 -X quit; screen -S l4d2_3 -X quit; screen -S l4d2_4 -X quit'
+    #ssh $user1@$host1 'screen -S l4d2_1 -X quit; screen -S l4d2_2 -X quit; screen -S l4d2_3 -X quit; screen -S l4d2_4 -X quit'
     echo "Servers down!"
     echo ""
     echo $(date '+%d %b %Y %H:%M:%S')."- Complete";

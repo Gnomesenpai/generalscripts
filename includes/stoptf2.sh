@@ -10,15 +10,15 @@
 /home/game/mvmx10_7_machine_attacks stop
 /home/game/mvmx10_8 stop
 /home/game/randomizerx10_1 stop
-/home/game/cactuscanyon_1 stop
-/home/game/asteroid_1 stop
+#/home/game/cactuscanyon_1 stop
+#/home/game/asteroid_1 stop
 /home/game/stockrotation_1 stop
 /home/game/dodgeball_1 stop
 /home/game/orange stop
 /home/game/mvmx20_1 stop
 /home/game/mvm_ma_2 stop
-/home/game/lanops_tf2_1 stop
-
+#/home/game/lanops_tf2_1 stop
+/home/game/tf2_betamaps stop
 
 #echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
 #echo "-----"
