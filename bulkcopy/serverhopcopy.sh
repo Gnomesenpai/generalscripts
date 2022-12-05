@@ -1,23 +1,23 @@
 #!/bin/bash
-wget 
+curl -L https://raw.githubusercontent.com/Gnomesenpai/generalscripts/master/bulkcopy/serverhop.cfg > /$base2/bulkcopy/serverhop.cfg
 #define directories
-base="/home/game"
-suffix="/addons/sourcemod/configs"
+base="home/game/tf2servers"
+base2="home/game"
+suffix="tf/addons/sourcemod/configs"
 
 #Define game server folders
-serverfiles="${base}/serverfiles/tf${suffix}"
-mvm30wave="${base}/tf2_adventures_30wave/tf${suffix}"
-maattk="${base}/tf2_machine_attacks/tf${suffix}"
-nox10="${base}/tf2_nox10/tf${suffix}"
-tf2ware="${base}/tf2_tf2ware/tf${suffix}"
-vanilla="${base}/tf2_machine_attacks/tf${suffix}"
-insurgency="${base}/insurgency/insurgency${suffix}"
-
-#use parallel cp to mass copy Webshortcuts.txt
-parallel cp -vf "${base}/bulkcopy/Webshortcuts.txt" :::  $serverfiles $mvm30wave $maattk $nox10 $tf2ware $vanilla $insurgency
+maattk="/${base}/machine_attacks/${suffix}"
+ao3="/${base}/mvm_ao3/${suffix}"
+joinblu="/${base}/mvm_joinblu/${suffix}"
+nox10="/${base}/mvm_nox10/${suffix}"
+uu="/${base}/mvm_uu/${suffix}"
+mvmx10="/${base}/mvmx10/${suffix}"
+stt="/${base}/stop_that_tank/${suffix}"
+#use parallel cp to mass copy serverhop.cfg
+#parallel cp -vf "/${base2}/bulkcopy/serverhop.cfg" :::  $serverfiles $mvm30wave $maattk $nox10 $tf2ware $vanilla $insurgency
 
 #parallel rsync to LA
-#parallel rsync --progress  -vhz "${base}/bulkcopy/Webshortcuts.txt" ::: game@la.moevsmachine.tf:$serverfiles game@la.moevsmachine.tf:$nox10 game@la.moevsmachine.tf:$maattk
+#parallel rsync --progress  -vhz "${base}/bulkcopy/serverhop.cfg" ::: game@aus.moevsmachine.tf:$serverfiles game@aus.moevsmachine.tf:$nox10 game@aus.moevsmachine.tf:$maattk
 echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
 echo "-----"
 
