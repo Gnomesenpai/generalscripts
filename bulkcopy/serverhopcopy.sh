@@ -18,7 +18,7 @@ stt="/${base}/stop_that_tank/${suffix}"
 parallel cp -vf "/${base2}/bulkcopy/serverhop.cfg" :::  $maattk $ao3 $joinblu $nox10 $uu $mvmx10 $stt
 
 #parallel rsync to LA
-parallel rsync --progress  -vhz "${base}/bulkcopy/serverhop.cfg" ::: game@aus.moevsmachine.tf:$mvmx10 game@aus.moevsmachine.tf:$joinblu
+parallel rsync --progress  -vhz "${base2}/bulkcopy/serverhop.cfg" ::: game@aus.moevsmachine.tf:$mvmx10 game@aus.moevsmachine.tf:$joinblu
 echo $(date '+%d %b %Y %H:%M:%S')."- Complete";
 echo "-----"
 
