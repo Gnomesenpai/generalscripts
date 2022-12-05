@@ -5,7 +5,7 @@ base="home/game/tf2servers"
 base2="home/game"
 suffix="tf/addons/sourcemod/configs"
 
-curl -L https://raw.githubusercontent.com/Gnomesenpai/generalscripts/master/bulkcopy/serverhop.cfg > /$base2/bulkcopy/serverhop.cfg
+curl -L https://raw.githubusercontent.com/Gnomesenpai/generalscripts/master/bulkcopy/serverhop.cfg > /${base2}/bulkcopy/serverhop.cfg
 #Define game server folders
 maattk="/${base}/machine_attacks/${suffix}"
 ao3="/${base}/mvm_ao3/${suffix}"
